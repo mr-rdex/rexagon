@@ -44,7 +44,8 @@ const Navigation = () => {
     { to: '/', label: 'Ana Sayfa' },
     { to: '/market', label: 'Market' },
     { to: '/forum', label: 'Forum' },
-    { to: '/siralama', label: 'Sıralama' }
+    { to: '/siralama', label: 'Sıralama' },
+    { to: '/hakkimizda', label: 'Hakkımızda' }
   ];
 
   return (
