@@ -82,24 +82,6 @@ const HomePage = () => {
             Türkiye'nin en büyük Minecraft sunucu topluluğuna katıl ve maceraya atıl!
           </p>
 
-          {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-            <Link
-              to="/kayit"
-              className="bg-[#FDD500] text-black font-bold uppercase tracking-wide px-8 py-4 rounded-xl hover:bg-[#E6C200] transition-all btn-3d text-center"
-              data-testid="hero-register-button"
-            >
-              Hemen Kayıt Ol
-            </Link>
-            <Link
-              to="/market"
-              className="bg-transparent border-2 border-[#FDD500] text-[#FDD500] font-bold uppercase tracking-wide px-8 py-4 rounded-xl hover:bg-[#FDD500]/10 transition-all text-center"
-              data-testid="hero-market-button"
-            >
-              Market'e Göz At
-            </Link>
-          </div>
-
           {/* Server Stats */}
           <div className="flex flex-col items-center gap-6">
             <div className="flex flex-wrap justify-center gap-6">
