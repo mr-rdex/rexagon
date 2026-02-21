@@ -13,6 +13,8 @@ const MarketPage = () => {
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState(kategori || null);
   const [purchasing, setPurchasing] = useState(null);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
 
   useEffect(() => {
     fetchCategories();
