@@ -67,19 +67,38 @@ const HomePage = () => {
   return (
     <div className="min-h-screen pt-24 pb-16 px-4" data-testid="home-page">
       {/* Hero Section */}
-      <div className="relative mb-16 overflow-hidden rounded-xl min-h-[600px] flex items-center justify-center" style={{
+      <div className="relative mb-16 overflow-hidden rounded-xl" style={{
         backgroundImage: 'url(/images/hero-bg.png)',
         backgroundSize: 'cover',
-        backgroundPosition: 'center'
+        backgroundPosition: 'center',
+        minHeight: '500px'
       }}>
-        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-[#222222]"></div>
-        <div className="relative container mx-auto max-w-7xl px-6 py-32 text-center z-10">
+        <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-transparent to-[#222222]"></div>
+        <div className="relative container mx-auto max-w-7xl px-6 py-20 text-center z-10">
           <h1 className="text-5xl md:text-7xl font-black tracking-tighter uppercase text-white mb-6" data-testid="hero-title">
             Rexagon'a <span className="text-[#FDD500]">Hoş Geldin</span>
           </h1>
           <p className="text-lg md:text-xl text-zinc-300 mb-12 max-w-2xl mx-auto">
             Türkiye'nin en büyük Minecraft sunucu topluluğuna katıl ve maceraya atıl!
           </p>
+
+          {/* CTA Buttons */}
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+            <Link
+              to="/kayit"
+              className="bg-[#FDD500] text-black font-bold uppercase tracking-wide px-8 py-4 rounded-xl hover:bg-[#E6C200] transition-all btn-3d text-center"
+              data-testid="hero-register-button"
+            >
+              Hemen Kayıt Ol
+            </Link>
+            <Link
+              to="/market"
+              className="bg-transparent border-2 border-[#FDD500] text-[#FDD500] font-bold uppercase tracking-wide px-8 py-4 rounded-xl hover:bg-[#FDD500]/10 transition-all text-center"
+              data-testid="hero-market-button"
+            >
+              Market'e Göz At
+            </Link>
+          </div>
 
           {/* Server Stats */}
           <div className="flex flex-col items-center gap-6">
