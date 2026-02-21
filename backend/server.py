@@ -593,6 +593,7 @@ async def create_market_item(urun: MarketUrun, admin: dict = Depends(get_admin_u
         "kategori": urun.kategori,
         "stok": urun.stok,
         "gorsel": urun.gorsel,
+        "indirim": urun.indirim if urun.indirim else 0,
         "olusturulma_tarihi": datetime.now(timezone.utc).isoformat()
     }
     await db.market_items.insert_one(urun_doc)
