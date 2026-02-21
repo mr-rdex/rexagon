@@ -89,6 +89,7 @@ function App() {
             <Route path="/siralama" element={<SiralamaPage />} />
             <Route path="/admin" element={user?.rol === 'admin' ? <AdminPage /> : <Navigate to="/" />} />
           </Routes>
+          <Footer />
         </div>
       </BrowserRouter>
     </AuthContext.Provider>
