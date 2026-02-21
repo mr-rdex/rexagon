@@ -315,6 +315,30 @@ async def get_latest_credit_loads():
     ]).to_list(10)
     return transactions
 
+@api_router.get("/leaderboard/ada-seviyesi")
+async def get_top_island_level():
+    users = await db.users.find({}, {"_id": 0, "sifre_hash": 0}).sort("ada_seviyesi", -1).limit(10).to_list(10)
+    for u in users:
+        u.setdefault("ada_seviyesi", 0)
+        u.setdefault("dinar", 0)
+        u.setdefault("biyografi", None)
+        u.setdefault("acik_temalar", [])
+        u.setdefault("aktif_tema_id", None)
+        u.setdefault("aktif_tema_gorsel", None)
+    return users
+
+@api_router.get("/leaderboard/dinar")
+async def get_top_dinar():
+    users = await db.users.find({}, {"_id": 0, "sifre_hash": 0}).sort("dinar", -1).limit(10).to_list(10)
+    for u in users:
+        u.setdefault("ada_seviyesi", 0)
+        u.setdefault("dinar", 0)
+        u.setdefault("biyografi", None)
+        u.setdefault("acik_temalar", [])
+        u.setdefault("aktif_tema_id", None)
+        u.setdefault("aktif_tema_gorsel", None)
+    return users
+
 # ============ FORUM ROUTES ============
 
 @api_router.get("/forum/kategoriler")
