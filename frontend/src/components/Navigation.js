@@ -62,7 +62,7 @@ const Navigation = () => {
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center space-x-10">
+          <div className="hidden lg:flex items-center space-x-14">
             {navLinks.map(link => (
               <Link
                 key={link.to}
