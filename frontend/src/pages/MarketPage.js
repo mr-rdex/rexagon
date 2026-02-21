@@ -66,18 +66,25 @@ const MarketPage = () => {
     setPurchasing(itemId);
     try {
       const token = localStorage.getItem('token');
-      await axios.post(
+      const response = await axios.post(
         `${API}/market/satin-al/${itemId}`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      alert('Satın alma başarılı!');
+      alert(`Satın alma başarılı! Minecraft komutu: ${response.data.minecraft_command}`);
+      setShowConfirmModal(false);
+      setSelectedItem(null);
       window.location.reload();
     } catch (error) {
       alert(error.response?.data?.detail || 'Satın alma başarısız');
     } finally {
       setPurchasing(null);
     }
+  };
+
+  const openConfirmModal = (item) => {
+    setSelectedItem(item);
+    setShowConfirmModal(true);
   };
 
   if (loading) {
