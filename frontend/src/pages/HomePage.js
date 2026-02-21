@@ -11,17 +11,19 @@ const HomePage = () => {
   const [sonAlisverisler, setSonAlisverisler] = useState([]);
   const [sonKrediYuklemeler, setSonKrediYuklemeler] = useState([]);
   const [haberler, setHaberler] = useState([]);
+  const [stats, setStats] = useState({ kayitli_oyuncu: 0, aktif_oyuncu: 0 });
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [krediRes, kayitRes, alisverisRes, yukleRes, haberRes] = await Promise.all([
+        const [krediRes, kayitRes, alisverisRes, yukleRes, haberRes, statsRes] = await Promise.all([
           axios.get(`${API}/leaderboard/kredi`),
           axios.get(`${API}/leaderboard/son-kayitlar`),
           axios.get(`${API}/leaderboard/son-alisverisler`),
           axios.get(`${API}/leaderboard/son-kredi-yuklemeler`),
-          axios.get(`${API}/haberler?limit=3`)
+          axios.get(`${API}/haberler?limit=3`),
+          axios.get(`${API}/stats`)
         ]);
 
         setTopKredi(krediRes.data.slice(0, 5));
@@ -29,6 +31,7 @@ const HomePage = () => {
         setSonAlisverisler(alisverisRes.data.slice(0, 5));
         setSonKrediYuklemeler(yukleRes.data.slice(0, 5));
         setHaberler(haberRes.data);
+        setStats(statsRes.data);
       } catch (error) {
         console.error('Veri yüklenemedi:', error);
       } finally {
