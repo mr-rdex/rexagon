@@ -101,6 +101,13 @@ class ThemeCreate(BaseModel):
     gorsel_url: str
     fiyat: float = 0
 
+class SifreDegistir(BaseModel):
+    eski_sifre: str
+    yeni_sifre: str
+
+class BiyografiGuncelle(BaseModel):
+    biyografi: str
+
 # ============ AUTH HELPERS ============
 
 def verify_password(plain_password, hashed_password):
