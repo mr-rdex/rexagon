@@ -600,9 +600,10 @@ async def create_market_item(urun: MarketUrun, admin: dict = Depends(get_admin_u
 
 @api_router.put("/admin/market/urun/{urun_id}")
 async def update_market_item(urun_id: str, urun: MarketUrun, admin: dict = Depends(get_admin_user)):
+    update_data = urun.model_dump()
     await db.market_items.update_one(
         {"id": urun_id},
-        {"$set": urun.model_dump()}
+        {"$set": update_data}
     )
     return {"message": "Ürün güncellendi"}
 
