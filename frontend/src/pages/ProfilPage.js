@@ -143,15 +143,30 @@ const ProfilPage = () => {
         )}
 
         {/* Profile Info */}
-        <div className="bg-[#1E1E1E] border border-zinc-800 rounded-lg p-8" data-testid="profile-info">
+        <div className="bg-[#1E1E1E] border border-zinc-800 rounded-xl p-8" data-testid="profile-info">
           <div className="flex flex-col md:flex-row items-center md:items-start space-y-6 md:space-y-0 md:space-x-8 mb-8">
-            <img
-              src={`https://minotar.net/avatar/${profileUser.kullanici_adi}/128`}
-              alt={profileUser.kullanici_adi}
-              className="w-32 h-32 rounded-lg shadow-lg"
-            />
+            {/* Avatar with Rank Badge */}
+            <div className="relative">
+              {profileUser.yetki_gorseli ? (
+                <img
+                  src={profileUser.yetki_gorseli}
+                  alt={profileUser.yetki}
+                  className="w-32 h-32 rounded-lg shadow-lg object-cover"
+                />
+              ) : (
+                <img
+                  src={`https://minotar.net/avatar/${profileUser.kullanici_adi}/128`}
+                  alt={profileUser.kullanici_adi}
+                  className="w-32 h-32 rounded-lg shadow-lg"
+                />
+              )}
+              <div className="absolute -bottom-3 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-[#FDD500] to-[#E6C200] px-4 py-1 rounded-full shadow-lg">
+                <span className="text-black font-bold text-xs uppercase">{profileUser.yetki || 'Oyuncu'}</span>
+              </div>
+            </div>
+            
             <div className="flex-1 text-center md:text-left">
-              <div className="flex items-center justify-center md:justify-start space-x-3 mb-2">
+              <div className="flex flex-col md:flex-row items-center md:items-center justify-center md:justify-start space-y-2 md:space-y-0 md:space-x-3 mb-2">
                 <h1 className="text-4xl font-black uppercase text-white">
                   {profileUser.kullanici_adi}
                 </h1>
