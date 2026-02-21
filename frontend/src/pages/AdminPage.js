@@ -360,7 +360,9 @@ const AdminPage = () => {
                           className="w-full bg-[#2A2A2A] border border-zinc-700 text-white rounded-md px-4 py-3 focus:outline-none focus:border-[#FDD500] focus:ring-1 focus:ring-[#FDD500] transition-all"
                           value={newItem.gorsel}
                           onChange={(e) => setNewItem({ ...newItem, gorsel: e.target.value })}
+                          placeholder="https://example.com/image.png"
                         />
+                        <p className="text-xs text-zinc-500 mt-1">Önerilen boyut: 300x300 piksel</p>
                       </div>
                       <div className="md:col-span-2 flex space-x-4">
                         <button
