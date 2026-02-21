@@ -120,6 +120,42 @@ class TestThemesAPI:
         assert data["message"] == "Tema oluşturuldu"
         print(f"PASS: Theme created with id {data['id']}")
         return data["id"]
+    
+    def test_admin_update_theme(self):
+        """PUT /api/admin/themes/{theme_id} updates a theme"""
+        # Login as admin
+        login_response = requests.post(f"{BASE_URL}/api/auth/giris", json={
+            "kullanici_adi": ADMIN_USERNAME,
+            "sifre": ADMIN_PASSWORD
+        })
+        token = login_response.json()["access_token"]
+        
+        # First create a theme to update
+        create_data = {
+            "isim": f"TEST_Theme_ToUpdate_{uuid.uuid4().hex[:6]}",
+            "gorsel_url": "https://example.com/original.jpg",
+            "fiyat": 50.0
+        }
+        create_response = requests.post(f"{BASE_URL}/api/admin/themes", 
+            json=create_data,
+            headers={"Authorization": f"Bearer {token}"}
+        )
+        assert create_response.status_code == 200
+        theme_id = create_response.json()["id"]
+        
+        # Update the theme
+        update_data = {
+            "isim": f"TEST_Theme_Updated_{uuid.uuid4().hex[:6]}",
+            "gorsel_url": "https://example.com/updated.jpg",
+            "fiyat": 75.0
+        }
+        update_response = requests.put(f"{BASE_URL}/api/admin/themes/{theme_id}",
+            json=update_data,
+            headers={"Authorization": f"Bearer {token}"}
+        )
+        assert update_response.status_code == 200
+        assert update_response.json()["message"] == "Tema güncellendi"
+        print(f"PASS: PUT /api/admin/themes/{theme_id} updated theme successfully")
 
 
 class TestReportsAPI:
@@ -214,6 +250,50 @@ class TestMarketAPI:
         for item in data:
             assert item.get("kategori") == "Paketler", f"Item {item.get('isim')} not in Paketler category"
         print(f"PASS: Paketler category has {len(data)} items")
+    
+    def test_admin_update_market_item(self):
+        """PUT /api/admin/market/urun/{urun_id} updates a market item"""
+        # Login as admin
+        login_response = requests.post(f"{BASE_URL}/api/auth/giris", json={
+            "kullanici_adi": ADMIN_USERNAME,
+            "sifre": ADMIN_PASSWORD
+        })
+        token = login_response.json()["access_token"]
+        
+        # First create an item to update
+        create_data = {
+            "isim": f"TEST_Item_ToUpdate_{uuid.uuid4().hex[:6]}",
+            "aciklama": "Original description",
+            "fiyat": 100.0,
+            "kategori": "Paketler",
+            "stok": 50,
+            "gorsel": "",
+            "indirim": 0
+        }
+        create_response = requests.post(f"{BASE_URL}/api/admin/market/urun", 
+            json=create_data,
+            headers={"Authorization": f"Bearer {token}"}
+        )
+        assert create_response.status_code == 200
+        item_id = create_response.json()["id"]
+        
+        # Update the item
+        update_data = {
+            "isim": f"TEST_Item_Updated_{uuid.uuid4().hex[:6]}",
+            "aciklama": "Updated description",
+            "fiyat": 150.0,
+            "kategori": "Paketler",
+            "stok": 100,
+            "gorsel": "https://example.com/updated.jpg",
+            "indirim": 10
+        }
+        update_response = requests.put(f"{BASE_URL}/api/admin/market/urun/{item_id}",
+            json=update_data,
+            headers={"Authorization": f"Bearer {token}"}
+        )
+        assert update_response.status_code == 200
+        assert update_response.json()["message"] == "Ürün güncellendi"
+        print(f"PASS: PUT /api/admin/market/urun/{item_id} updated item successfully")
 
 
 class TestAdminAPI:
@@ -274,6 +354,40 @@ class TestNews:
         data = response.json()
         assert isinstance(data, list)
         print(f"PASS: News: {len(data)} articles")
+    
+    def test_admin_update_news(self):
+        """PUT /api/admin/haber/{haber_id} updates a news article"""
+        # Login as admin
+        login_response = requests.post(f"{BASE_URL}/api/auth/giris", json={
+            "kullanici_adi": ADMIN_USERNAME,
+            "sifre": ADMIN_PASSWORD
+        })
+        token = login_response.json()["access_token"]
+        
+        # First create a news item to update
+        create_data = {
+            "baslik": f"TEST_News_ToUpdate_{uuid.uuid4().hex[:6]}",
+            "icerik": "Original content"
+        }
+        create_response = requests.post(f"{BASE_URL}/api/admin/haber", 
+            json=create_data,
+            headers={"Authorization": f"Bearer {token}"}
+        )
+        assert create_response.status_code == 200
+        news_id = create_response.json()["id"]
+        
+        # Update the news
+        update_data = {
+            "baslik": f"TEST_News_Updated_{uuid.uuid4().hex[:6]}",
+            "icerik": "Updated content with more information"
+        }
+        update_response = requests.put(f"{BASE_URL}/api/admin/haber/{news_id}",
+            json=update_data,
+            headers={"Authorization": f"Bearer {token}"}
+        )
+        assert update_response.status_code == 200
+        assert update_response.json()["message"] == "Haber güncellendi"
+        print(f"PASS: PUT /api/admin/haber/{news_id} updated news successfully")
 
 
 class TestForumAPI:
