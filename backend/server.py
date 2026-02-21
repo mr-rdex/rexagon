@@ -130,6 +130,9 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
     user = await db.users.find_one({"id": user_id}, {"_id": 0})
     if user is None:
         raise credentials_exception
+    user.setdefault("acik_temalar", [])
+    user.setdefault("aktif_tema_id", None)
+    user.setdefault("aktif_tema_gorsel", None)
     return user
 
 async def get_admin_user(current_user: dict = Depends(get_current_user)):
