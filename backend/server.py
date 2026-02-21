@@ -240,6 +240,25 @@ async def update_profile(profil_arka_plani: str, current_user: dict = Depends(ge
     )
     return {"message": "Profil güncellendi"}
 
+@api_router.put("/users/sifre")
+async def change_password(data: SifreDegistir, current_user: dict = Depends(get_current_user)):
+    user_full = await db.users.find_one({"id": current_user["id"]}, {"_id": 0})
+    if not verify_password(data.eski_sifre, user_full["sifre_hash"]):
+        raise HTTPException(status_code=400, detail="Mevcut şifre hatalı")
+    await db.users.update_one(
+        {"id": current_user["id"]},
+        {"$set": {"sifre_hash": get_password_hash(data.yeni_sifre)}}
+    )
+    return {"message": "Şifre başarıyla değiştirildi"}
+
+@api_router.put("/users/biyografi")
+async def update_biography(data: BiyografiGuncelle, current_user: dict = Depends(get_current_user)):
+    await db.users.update_one(
+        {"id": current_user["id"]},
+        {"$set": {"biyografi": data.biyografi}}
+    )
+    return {"message": "Biyografi güncellendi"}
+
 # ============ LEADERBOARD ROUTES ============
 
 @api_router.get("/leaderboard/kredi")
