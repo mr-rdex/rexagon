@@ -235,7 +235,7 @@ const AdminPage = () => {
                         <tr key={u.id} className="border-b border-zinc-800 hover:bg-[#2A2A2A] transition-colors">
                           <td className="p-4">
                             <div className="flex items-center space-x-3">
-                              <img src={`https://minotar.net/avatar/${u.kullanici_adi}/32`} alt={u.kullanici_adi} className="w-8 h-8 rounded" />
+                              <img src={`http://cravatar.eu/helmavatar/${u.kullanici_adi}/32`} alt={u.kullanici_adi} className="w-8 h-8 rounded" />
                               <span className="text-white font-medium">{u.kullanici_adi}</span>
                             </div>
                           </td>

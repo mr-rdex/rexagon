@@ -229,7 +229,7 @@ const ProfilPage = () => {
                 />
               ) : (
                 <img
-                  src={`https://minotar.net/avatar/${profileUser.kullanici_adi}/128`}
+                  src={`http://cravatar.eu/helmavatar/${profileUser.kullanici_adi}/128`}
                   alt={profileUser.kullanici_adi}
                   className="w-32 h-32 rounded-lg shadow-lg"
                 />

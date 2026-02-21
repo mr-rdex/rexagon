@@ -160,7 +160,7 @@ const HomePage = () => {
                   <div className="flex items-center space-x-3">
                     <span className="text-[#FDD500] font-bold w-6">#{index + 1}</span>
                     <img
-                      src={`https://minotar.net/avatar/${user.kullanici_adi}/32`}
+                      src={`http://cravatar.eu/helmavatar/${user.kullanici_adi}/32`}
                       alt={user.kullanici_adi}
                       className="w-8 h-8 rounded"
                     />
@@ -187,7 +187,7 @@ const HomePage = () => {
                 >
                   <div className="flex items-center space-x-3">
                     <img
-                      src={`https://minotar.net/avatar/${user.kullanici_adi}/32`}
+                      src={`http://cravatar.eu/helmavatar/${user.kullanici_adi}/32`}
                       alt={user.kullanici_adi}
                       className="w-8 h-8 rounded"
                     />

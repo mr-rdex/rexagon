@@ -85,7 +85,7 @@ const Navigation = () => {
                   data-testid="profile-menu-button"
                 >
                   <img
-                    src={`https://minotar.net/avatar/${user.kullanici_adi}/32`}
+                    src={`http://cravatar.eu/helmavatar/${user.kullanici_adi}/32`}
                     alt={user.kullanici_adi}
                     className="w-8 h-8 rounded"
                   />
@@ -202,7 +202,7 @@ const Navigation = () => {
                 <>
                   <div className="flex items-center space-x-3 mb-4">
                     <img
-                      src={`https://minotar.net/avatar/${user.kullanici_adi}/32`}
+                      src={`http://cravatar.eu/helmavatar/${user.kullanici_adi}/32`}
                       alt={user.kullanici_adi}
                       className="w-8 h-8 rounded"
                     />
