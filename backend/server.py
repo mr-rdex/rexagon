@@ -711,6 +711,14 @@ async def delete_theme(theme_id: str, admin: dict = Depends(get_admin_user)):
     await db.themes.delete_one({"id": theme_id})
     return {"message": "Tema silindi"}
 
+@api_router.put("/admin/themes/{theme_id}")
+async def update_theme(theme_id: str, theme: ThemeCreate, admin: dict = Depends(get_admin_user)):
+    await db.themes.update_one(
+        {"id": theme_id},
+        {"$set": {"isim": theme.isim, "gorsel_url": theme.gorsel_url, "fiyat": theme.fiyat}}
+    )
+    return {"message": "Tema güncellendi"}
+
 @api_router.post("/themes/{theme_id}/satin-al")
 async def purchase_theme(theme_id: str, current_user: dict = Depends(get_current_user)):
     theme = await db.themes.find_one({"id": theme_id}, {"_id": 0})
