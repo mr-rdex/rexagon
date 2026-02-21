@@ -815,10 +815,25 @@ async def startup_event():
             "yetki": "Yönetici",
             "yetki_gorseli": None,
             "dogum_tarihi": "2000-01-01",
-            "kayit_tarihi": datetime.now(timezone.utc).isoformat()
+            "kayit_tarihi": datetime.now(timezone.utc).isoformat(),
+            "acik_temalar": [],
+            "aktif_tema_id": None,
+            "aktif_tema_gorsel": None
         }
         await db.users.insert_one(admin_doc)
         logger.info("Admin kullanıcı oluşturuldu: admin / admin123")
+    
+    # Paketler kategorisine örnek ürünler ekle
+    paketler_count = await db.market_items.count_documents({"kategori": "Paketler"})
+    if paketler_count == 0:
+        sample_items = [
+            {"id": str(uuid.uuid4()), "isim": "Başlangıç Paketi", "aciklama": "Yeni oyuncular için temel araç ve malzemeler içeren harika başlangıç paketi.", "fiyat": 50.0, "kategori": "Paketler", "stok": 999, "gorsel": "", "indirim": 0, "olusturulma_tarihi": datetime.now(timezone.utc).isoformat()},
+            {"id": str(uuid.uuid4()), "isim": "Savaşçı Paketi", "aciklama": "Elmas zırh seti, kılıç ve özel büyüler içeren savaşçı paketi.", "fiyat": 150.0, "kategori": "Paketler", "stok": 500, "gorsel": "", "indirim": 10, "olusturulma_tarihi": datetime.now(timezone.utc).isoformat()},
+            {"id": str(uuid.uuid4()), "isim": "Madenci Paketi", "aciklama": "Elmas kazma, meşale ve madenci şapkası içeren özel madenci paketi.", "fiyat": 100.0, "kategori": "Paketler", "stok": 750, "gorsel": "", "indirim": 0, "olusturulma_tarihi": datetime.now(timezone.utc).isoformat()},
+            {"id": str(uuid.uuid4()), "isim": "Ultimate Paket", "aciklama": "Tüm eşyaları, VIP erişimi ve özel efektleri içeren en büyük paket!", "fiyat": 500.0, "kategori": "Paketler", "stok": 100, "gorsel": "", "indirim": 20, "olusturulma_tarihi": datetime.now(timezone.utc).isoformat()},
+        ]
+        await db.market_items.insert_many(sample_items)
+        logger.info("Paketler kategorisine örnek ürünler eklendi")
 
 @app.on_event("shutdown")
 async def shutdown_db_client():
