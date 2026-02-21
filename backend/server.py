@@ -419,6 +419,24 @@ async def get_market_categories():
     categories = await db.market_categories.find({}, {"_id": 0}).to_list(100)
     return categories
 
+@api_router.get("/market/en-cok-satanlar")
+async def get_best_sellers():
+    # Get top selling items based on purchase count
+    best_sellers = await db.purchases.aggregate([
+        {"$group": {
+            "_id": "$urun_id",
+            "satis_sayisi": {"$sum": 1},
+            "urun_adi": {"$first": "$urun_adi"}
+        }},
+        {"$sort": {"satis_sayisi": -1}},
+        {"$limit": 10}
+    ]).to_list(10)
+    
+    # Get full item details
+    item_ids = [item["_id"] for item in best_sellers]
+    items = await db.market_items.find({"id": {"$in": item_ids}}, {"_id": 0}).to_list(10)
+    return items
+
 @api_router.get("/market/{kategori}/urunler")
 async def get_market_items(kategori: Optional[str] = None):
     if kategori and kategori != "Tümü":
