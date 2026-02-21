@@ -13,6 +13,7 @@ import MarketPage from './pages/MarketPage';
 import ProfilPage from './pages/ProfilPage';
 import SiralamaPage from './pages/SiralamaPage';
 import AdminPage from './pages/AdminPage';
+import CuzdanPage from './pages/CuzdanPage';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
