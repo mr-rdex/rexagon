@@ -74,6 +74,7 @@ class MarketUrun(BaseModel):
     kategori: str
     stok: int
     gorsel: Optional[str] = None
+    indirim: Optional[float] = 0
 
 class Haber(BaseModel):
     baslik: str
