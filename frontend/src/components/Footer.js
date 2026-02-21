@@ -39,8 +39,8 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
-                <Link to="/siralama" className="text-zinc-400 hover:text-[#FDD500] transition-colors text-sm">
-                  Sıralama
+                <Link to="/hakkimizda" className="text-zinc-400 hover:text-[#FDD500] transition-colors text-sm">
+                  Hakkımızda
                 </Link>
               </li>
             </ul>
