@@ -156,6 +156,8 @@ async def kayit_ol(user: UserRegister):
         "kredi": 0.0,
         "profil_arka_plani": None,
         "rol": "user",
+        "yetki": "Oyuncu",
+        "yetki_gorseli": None,
         "dogum_tarihi": user.dogum_tarihi,
         "kayit_tarihi": datetime.now(timezone.utc).isoformat()
     }
