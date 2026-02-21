@@ -115,14 +115,14 @@ const Navigation = () => {
                       <User size={18} />
                       <span>Profil</span>
                     </Link>
-                    <Link
-                      to="/profil"
-                      className="flex items-center space-x-3 px-4 py-3 hover:bg-[#2A2A2A] transition-colors text-white"
-                      onClick={() => setShowProfileMenu(false)}
+                    <button
+                      className="w-full flex items-center space-x-3 px-4 py-3 hover:bg-[#2A2A2A] transition-colors text-white"
+                      onClick={() => { setShowProfileMenu(false); setBio(user?.biyografi || ''); setShowSettings(true); setSettingsTab('bio'); }}
+                      data-testid="profile-settings-button"
                     >
                       <Settings size={18} />
                       <span>Profil Ayarları</span>
-                    </Link>
+                    </button>
                     <Link
                       to="/cuzdan"
                       className="flex items-center space-x-3 px-4 py-3 hover:bg-[#2A2A2A] transition-colors text-white"
