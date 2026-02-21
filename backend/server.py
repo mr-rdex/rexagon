@@ -554,6 +554,10 @@ async def delete_forum_reply(cevap_id: str, admin: dict = Depends(get_admin_user
 # Include router
 app.include_router(api_router)
 
+@app.get("/")
+async def root():
+    return {"message": "Rexagon Minecraft Server API", "status": "online"}
+
 app.add_middleware(
     CORSMiddleware,
     allow_credentials=True,
