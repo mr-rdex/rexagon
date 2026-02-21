@@ -35,9 +35,14 @@ const MarketPage = () => {
 
   const fetchItems = async () => {
     try {
-      const url = selectedCategory
-        ? `${API}/market/${selectedCategory}/urunler`
-        : `${API}/market/urunler`;
+      let url;
+      if (selectedCategory === 'En Çok Satanlar') {
+        url = `${API}/market/en-cok-satanlar`;
+      } else if (selectedCategory && selectedCategory !== 'Tümü') {
+        url = `${API}/market/${selectedCategory}/urunler`;
+      } else {
+        url = `${API}/market/Tümü/urunler`;
+      }
       const response = await axios.get(url);
       setItems(response.data);
     } catch (error) {
