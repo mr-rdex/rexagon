@@ -489,7 +489,15 @@ async def purchase_item(urun_id: str, current_user: dict = Depends(get_current_u
     }
     await db.purchases.insert_one(purchase_doc)
     
-    return {"message": "Satın alma başarılı", "yeni_kredi": current_user["kredi"] - item["fiyat"]}
+    # TODO: Send command to Minecraft server
+    # minecraft_command = f"give {current_user['kullanici_adi']} {item['isim']}"
+    # send_to_minecraft_server(minecraft_command)
+    
+    return {
+        "message": "Satın alma başarılı",
+        "yeni_kredi": current_user["kredi"] - item["fiyat"],
+        "minecraft_command": f"give {current_user['kullanici_adi']} minecraft:diamond 1"  # Placeholder
+    }
 
 # ============ NEWS ROUTES ============
 
