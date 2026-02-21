@@ -60,48 +60,49 @@ const HomePage = () => {
   return (
     <div className="min-h-screen pt-24 pb-16 px-4" data-testid="home-page">
       {/* Hero Section */}
-      <div className="relative mb-16 overflow-hidden rounded-lg" style={{
-        backgroundImage: 'url(https://images.unsplash.com/photo-1684159607944-030be9444b66?q=80&w=2070&auto=format&fit=crop)',
+      <div className="relative mb-16 overflow-hidden rounded-xl min-h-[600px] flex items-center justify-center" style={{
+        backgroundImage: 'url(/images/hero-bg.png)',
         backgroundSize: 'cover',
         backgroundPosition: 'center'
       }}>
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#222222]"></div>
-        <div className="relative container mx-auto max-w-7xl px-6 py-32 md:py-48 text-center">
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-[#222222]"></div>
+        <div className="relative container mx-auto max-w-7xl px-6 py-32 text-center z-10">
           <h1 className="text-5xl md:text-7xl font-black tracking-tighter uppercase text-white mb-6" data-testid="hero-title">
             Rexagon'a <span className="text-[#FDD500]">Hoş Geldin</span>
           </h1>
-          <p className="text-lg md:text-xl text-zinc-300 mb-8 max-w-2xl mx-auto">
+          <p className="text-lg md:text-xl text-zinc-300 mb-12 max-w-2xl mx-auto">
             Türkiye'nin en büyük Minecraft sunucu topluluğuna katıl ve maceraya atıl!
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link
-              to="/kayit"
-              className="bg-[#FDD500] text-black font-bold uppercase tracking-wide px-8 py-4 rounded-lg hover:bg-[#E6C200] transition-all btn-3d text-center"
-              data-testid="hero-register-button"
-            >
-              Hemen Kayıt Ol
-            </Link>
-            <Link
-              to="/market"
-              className="bg-transparent border-2 border-[#FDD500] text-[#FDD500] font-bold uppercase tracking-wide px-8 py-4 rounded-lg hover:bg-[#FDD500]/10 transition-all text-center"
-              data-testid="hero-market-button"
-            >
-              Market'e Göz At
-            </Link>
-          </div>
+
           {/* Server Stats */}
-          <div className="flex flex-wrap justify-center gap-6 mt-12">
-            <div className="bg-[#1E1E1E]/80 backdrop-blur-md border border-white/10 rounded-xl px-8 py-4 hover:shadow-[0_0_30px_rgba(255,255,255,0.1)] transition-all">
-              <div className="text-center">
-                <p className="text-3xl font-black text-[#FDD500]">{stats.aktif_oyuncu}</p>
-                <p className="text-sm text-zinc-400 uppercase tracking-wider mt-1">Aktif Oyuncu</p>
+          <div className="flex flex-col items-center gap-6">
+            <div className="flex flex-wrap justify-center gap-6">
+              <div className="bg-[#1E1E1E]/90 backdrop-blur-md border border-white/10 rounded-xl px-8 py-6 hover:shadow-[0_0_30px_rgba(255,213,0,0.3)] transition-all duration-300">
+                <div className="text-center">
+                  <p className="text-4xl font-black text-[#FDD500] mb-2">{stats.aktif_oyuncu}</p>
+                  <p className="text-sm text-zinc-400 uppercase tracking-wider">Aktif Oyuncu</p>
+                </div>
+              </div>
+              <div className="bg-[#1E1E1E]/90 backdrop-blur-md border border-white/10 rounded-xl px-8 py-6 hover:shadow-[0_0_30px_rgba(255,213,0,0.3)] transition-all duration-300">
+                <div className="text-center">
+                  <p className="text-4xl font-black text-[#FDD500] mb-2">{stats.kayitli_oyuncu}</p>
+                  <p className="text-sm text-zinc-400 uppercase tracking-wider">Kayıtlı Oyuncu</p>
+                </div>
               </div>
             </div>
-            <div className="bg-[#1E1E1E]/80 backdrop-blur-md border border-white/10 rounded-xl px-8 py-4 hover:shadow-[0_0_30px_rgba(255,255,255,0.1)] transition-all">
-              <div className="text-center">
-                <p className="text-3xl font-black text-[#FDD500]">{stats.kayitli_oyuncu}</p>
-                <p className="text-sm text-zinc-400 uppercase tracking-wider mt-1">Kayıtlı Oyuncu</p>
-              </div>
+            {/* IP Address */}
+            <div className="w-full max-w-md">
+              <button
+                onClick={handleCopyIP}
+                className="w-full bg-[#1E1E1E]/90 backdrop-blur-md border-2 border-[#FDD500] rounded-xl px-8 py-4 hover:bg-[#FDD500]/10 hover:shadow-[0_0_30px_rgba(255,213,0,0.3)] transition-all duration-300 flex items-center justify-center space-x-3"
+                data-testid="copy-ip-button"
+              >
+                <span className="text-[#FDD500] font-bold text-xl">play.rexagon.com.tr</span>
+                {copied ? <Check className="text-[#FDD500]" size={24} /> : <Copy className="text-[#FDD500]" size={24} />}
+              </button>
+              {copied && (
+                <p className="text-center text-green-500 text-sm mt-2">IP adresi kopyalandı!</p>
+              )}
             </div>
           </div>
         </div>
