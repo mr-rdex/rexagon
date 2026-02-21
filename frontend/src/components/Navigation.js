@@ -1,17 +1,26 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../App';
-import { Menu, X, User, LogOut, Shield } from 'lucide-react';
+import { Menu, X, User, LogOut, Shield, Wallet, Settings, Copy, Check } from 'lucide-react';
 
 const Navigation = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [showProfileMenu, setShowProfileMenu] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   const handleLogout = () => {
     logout();
     navigate('/');
     setMobileMenuOpen(false);
+    setShowProfileMenu(false);
+  };
+
+  const handleCopyIP = () => {
+    navigator.clipboard.writeText('play.rexagon.com.tr');
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
   };
 
   const navLinks = [
@@ -27,19 +36,29 @@ const Navigation = () => {
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-3" data-testid="logo-link">
-            <div className="w-10 h-10 bg-[#FDD500] flex items-center justify-center font-black text-black text-xl">
-              R
+            <div className="relative w-12 h-12 bg-[#FDD500] flex items-center justify-center font-black text-black text-2xl transform rotate-45 hover:rotate-0 transition-transform duration-300">
+              <span className="transform -rotate-45">R</span>
             </div>
-            <span className="text-2xl font-black text-white tracking-tighter uppercase">Rexagon</span>
+            <div className="flex flex-col">
+              <span className="text-2xl md:text-3xl font-black text-white tracking-tighter uppercase leading-none">REXAGON</span>
+              <button
+                onClick={handleCopyIP}
+                className="text-xs text-[#FDD500] hover:text-[#E6C200] transition-colors flex items-center space-x-1 mt-0.5"
+                data-testid="copy-ip-button"
+              >
+                <span>play.rexagon.com.tr</span>
+                {copied ? <Check size={12} /> : <Copy size={12} />}
+              </button>
+            </div>
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
+          <div className="hidden lg:flex items-center space-x-6">
             {navLinks.map(link => (
               <Link
                 key={link.to}
                 to={link.to}
-                className="text-zinc-400 hover:text-[#FDD500] font-medium transition-colors uppercase tracking-wider text-sm"
+                className="text-zinc-400 hover:text-[#FDD500] font-medium transition-colors uppercase tracking-wider text-sm whitespace-nowrap"
                 data-testid={`nav-${link.label.toLowerCase().replace(' ', '-')}`}
               >
                 {link.label}
@@ -50,42 +69,85 @@ const Navigation = () => {
           {/* User Actions */}
           <div className="hidden md:flex items-center space-x-4">
             {user ? (
-              <>
-                <div className="flex items-center space-x-3 px-4 py-2 bg-[#1E1E1E] border border-zinc-800 rounded-md">
+              <div className="relative">
+                <button
+                  onMouseEnter={() => setShowProfileMenu(true)}
+                  onMouseLeave={() => setShowProfileMenu(false)}
+                  className="flex items-center space-x-3 px-4 py-2 bg-[#1E1E1E] border border-zinc-800 rounded-lg hover:border-[#FDD500]/50 transition-all"
+                  data-testid="profile-menu-button"
+                >
                   <img
                     src={`https://minotar.net/avatar/${user.kullanici_adi}/32`}
                     alt={user.kullanici_adi}
                     className="w-8 h-8 rounded"
                   />
-                  <div className="flex flex-col">
+                  <div className="flex flex-col items-start">
                     <span className="text-sm font-medium text-white">{user.kullanici_adi}</span>
                     <span className="text-xs text-[#FDD500] font-bold">{user.kredi.toFixed(0)} ₺</span>
                   </div>
-                </div>
-                <Link
-                  to="/profil"
-                  className="p-2 text-zinc-400 hover:text-[#FDD500] transition-colors"
-                  data-testid="profile-button"
-                >
-                  <User size={20} />
-                </Link>
-                {user.rol === 'admin' && (
-                  <Link
-                    to="/admin"
-                    className="p-2 text-zinc-400 hover:text-[#FDD500] transition-colors"
-                    data-testid="admin-button"
-                  >
-                    <Shield size={20} />
-                  </Link>
-                )}
-                <button
-                  onClick={handleLogout}
-                  className="p-2 text-zinc-400 hover:text-red-500 transition-colors"
-                  data-testid="logout-button"
-                >
-                  <LogOut size={20} />
                 </button>
-              </>
+
+                {showProfileMenu && (
+                  <div
+                    onMouseEnter={() => setShowProfileMenu(true)}
+                    onMouseLeave={() => setShowProfileMenu(false)}
+                    className="absolute right-0 top-full mt-2 w-56 bg-[#1E1E1E] border border-zinc-800 rounded-lg shadow-lg overflow-hidden"
+                    data-testid="profile-dropdown"
+                  >
+                    <Link
+                      to="/profil"
+                      className="flex items-center space-x-3 px-4 py-3 hover:bg-[#2A2A2A] transition-colors text-white"
+                      onClick={() => setShowProfileMenu(false)}
+                    >
+                      <User size={18} />
+                      <span>Profil</span>
+                    </Link>
+                    <Link
+                      to="/profil"
+                      className="flex items-center space-x-3 px-4 py-3 hover:bg-[#2A2A2A] transition-colors text-white"
+                      onClick={() => setShowProfileMenu(false)}
+                    >
+                      <Settings size={18} />
+                      <span>Profil Ayarları</span>
+                    </Link>
+                    <Link
+                      to="/cuzdan"
+                      className="flex items-center space-x-3 px-4 py-3 hover:bg-[#2A2A2A] transition-colors text-white"
+                      onClick={() => setShowProfileMenu(false)}
+                      data-testid="wallet-link"
+                    >
+                      <Wallet size={18} />
+                      <div className="flex flex-col">
+                        <span>Cüzdan</span>
+                        <span className="text-xs text-[#FDD500]">{user.kredi.toFixed(0)} ₺</span>
+                      </div>
+                    </Link>
+                    {user.rol === 'admin' && (
+                      <>
+                        <div className="border-t border-zinc-800"></div>
+                        <Link
+                          to="/admin"
+                          className="flex items-center space-x-3 px-4 py-3 hover:bg-[#2A2A2A] transition-colors text-[#FDD500]"
+                          onClick={() => setShowProfileMenu(false)}
+                          data-testid="admin-link"
+                        >
+                          <Shield size={18} />
+                          <span>Yönetim</span>
+                        </Link>
+                      </>
+                    )}
+                    <div className="border-t border-zinc-800"></div>
+                    <button
+                      onClick={handleLogout}
+                      className="w-full flex items-center space-x-3 px-4 py-3 hover:bg-[#2A2A2A] transition-colors text-red-400"
+                      data-testid="logout-button"
+                    >
+                      <LogOut size={18} />
+                      <span>Çıkış Yap</span>
+                    </button>
+                  </div>
+                )}
+              </div>
             ) : (
               <>
                 <Link
@@ -97,7 +159,7 @@ const Navigation = () => {
                 </Link>
                 <Link
                   to="/kayit"
-                  className="bg-[#FDD500] text-black font-bold uppercase tracking-wide px-6 py-2 rounded-sm hover:bg-[#E6C200] transition-all btn-3d"
+                  className="bg-[#FDD500] text-black font-bold uppercase tracking-wide px-6 py-2 rounded-lg hover:bg-[#E6C200] transition-all btn-3d"
                   data-testid="register-link"
                 >
                   Kayıt Ol
@@ -149,6 +211,13 @@ const Navigation = () => {
                     onClick={() => setMobileMenuOpen(false)}
                   >
                     Profil
+                  </Link>
+                  <Link
+                    to="/cuzdan"
+                    className="block py-2 text-zinc-400 hover:text-[#FDD500]"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    Cüzdan
                   </Link>
                   {user.rol === 'admin' && (
                     <Link
