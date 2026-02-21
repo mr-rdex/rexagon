@@ -384,7 +384,17 @@ const AdminPage = () => {
                       </div>
                       <p className="text-sm text-zinc-400 mb-3 line-clamp-2">{item.aciklama}</p>
                       <div className="flex items-center justify-between">
-                        <span className="text-[#FDD500] font-bold">{item.fiyat} ₺</span>
+                        <div className="flex flex-col">
+                          {item.indirim > 0 && (
+                            <>
+                              <span className="text-xs text-red-500 font-bold">%{item.indirim} İNDİRİM</span>
+                              <span className="text-sm text-zinc-500 line-through">{item.fiyat} ₺</span>
+                            </>
+                          )}
+                          <span className="text-[#FDD500] font-bold">
+                            {(item.indirim > 0 ? item.fiyat * (1 - item.indirim / 100) : item.fiyat).toFixed(2)} ₺
+                          </span>
+                        </div>
                         <span className="text-xs text-zinc-500">Stok: {item.stok}</span>
                       </div>
                     </div>
