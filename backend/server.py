@@ -652,6 +652,109 @@ async def delete_forum_reply(cevap_id: str, admin: dict = Depends(get_admin_user
     await db.forum_replies.delete_one({"id": cevap_id})
     return {"message": "Cevap silindi"}
 
+# ============ REPORT ROUTES ============
+
+@api_router.post("/reports")
+async def create_report(report: ReportCreate, current_user: dict = Depends(get_current_user)):
+    report_id = str(uuid.uuid4())
+    report_doc = {
+        "id": report_id,
+        "baslik": report.baslik,
+        "aciklama": report.aciklama,
+        "konu": report.konu,
+        "yazar_id": current_user["id"],
+        "yazar_adi": current_user["kullanici_adi"],
+        "tarih": datetime.now(timezone.utc).isoformat()
+    }
+    await db.reports.insert_one(report_doc)
+    return {"message": "Rapor gönderildi", "id": report_id}
+
+@api_router.get("/admin/reports")
+async def get_all_reports(admin: dict = Depends(get_admin_user)):
+    reports = await db.reports.find({}, {"_id": 0}).sort("tarih", -1).to_list(1000)
+    return reports
+
+@api_router.delete("/admin/reports/{report_id}")
+async def delete_report(report_id: str, admin: dict = Depends(get_admin_user)):
+    await db.reports.delete_one({"id": report_id})
+    return {"message": "Rapor silindi"}
+
+# ============ THEME ROUTES ============
+
+@api_router.get("/themes")
+async def get_all_themes():
+    themes = await db.themes.find({}, {"_id": 0}).to_list(1000)
+    return themes
+
+@api_router.post("/admin/themes")
+async def create_theme(theme: ThemeCreate, admin: dict = Depends(get_admin_user)):
+    theme_id = str(uuid.uuid4())
+    theme_doc = {
+        "id": theme_id,
+        "isim": theme.isim,
+        "gorsel_url": theme.gorsel_url,
+        "fiyat": theme.fiyat,
+        "olusturulma_tarihi": datetime.now(timezone.utc).isoformat()
+    }
+    await db.themes.insert_one(theme_doc)
+    return {"message": "Tema oluşturuldu", "id": theme_id}
+
+@api_router.delete("/admin/themes/{theme_id}")
+async def delete_theme(theme_id: str, admin: dict = Depends(get_admin_user)):
+    await db.themes.delete_one({"id": theme_id})
+    return {"message": "Tema silindi"}
+
+@api_router.post("/themes/{theme_id}/satin-al")
+async def purchase_theme(theme_id: str, current_user: dict = Depends(get_current_user)):
+    theme = await db.themes.find_one({"id": theme_id}, {"_id": 0})
+    if not theme:
+        raise HTTPException(status_code=404, detail="Tema bulunamadı")
+    
+    user_themes = current_user.get("acik_temalar", [])
+    if theme_id in user_themes:
+        raise HTTPException(status_code=400, detail="Bu tema zaten açık")
+    
+    if theme["fiyat"] > 0 and current_user["kredi"] < theme["fiyat"]:
+        raise HTTPException(status_code=400, detail="Yetersiz kredi")
+    
+    update = {"$push": {"acik_temalar": theme_id}}
+    if theme["fiyat"] > 0:
+        update["$inc"] = {"kredi": -theme["fiyat"]}
+    
+    await db.users.update_one({"id": current_user["id"]}, update)
+    return {"message": "Tema açıldı", "yeni_kredi": current_user["kredi"] - theme["fiyat"]}
+
+@api_router.put("/themes/aktif/{theme_id}")
+async def set_active_theme(theme_id: str, current_user: dict = Depends(get_current_user)):
+    user_themes = current_user.get("acik_temalar", [])
+    if theme_id not in user_themes:
+        raise HTTPException(status_code=400, detail="Bu temayı henüz açmadınız")
+    
+    theme = await db.themes.find_one({"id": theme_id}, {"_id": 0})
+    if not theme:
+        raise HTTPException(status_code=404, detail="Tema bulunamadı")
+    
+    await db.users.update_one(
+        {"id": current_user["id"]},
+        {"$set": {"aktif_tema_id": theme_id, "aktif_tema_gorsel": theme["gorsel_url"]}}
+    )
+    return {"message": "Tema aktifleştirildi"}
+
+@api_router.put("/themes/kaldir")
+async def remove_active_theme(current_user: dict = Depends(get_current_user)):
+    await db.users.update_one(
+        {"id": current_user["id"]},
+        {"$set": {"aktif_tema_id": None, "aktif_tema_gorsel": None}}
+    )
+    return {"message": "Tema kaldırıldı"}
+
+# ============ ALL MARKET ITEMS ROUTE ============
+
+@api_router.get("/market/urunler")
+async def get_all_market_items():
+    items = await db.market_items.find({}, {"_id": 0}).to_list(1000)
+    return items
+
 # Include router
 app.include_router(api_router)
 
