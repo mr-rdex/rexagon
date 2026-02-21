@@ -100,7 +100,7 @@ const SiralamaPage = () => {
                         #{index + 1}
                       </span>
                       <img
-                        src={`http://cravatar.eu/helmavatar/${user.kullanici_adi}/48`}
+                        src={`https://cravatar.eu/helmavatar/${user.kullanici_adi}/48`}
                         alt={user.kullanici_adi}
                         className="w-12 h-12 rounded"
                       />
@@ -125,7 +125,7 @@ const SiralamaPage = () => {
                   >
                     <div className="flex items-center space-x-4">
                       <img
-                        src={`http://cravatar.eu/helmavatar/${user.kullanici_adi}/48`}
+                        src={`https://cravatar.eu/helmavatar/${user.kullanici_adi}/48`}
                         alt={user.kullanici_adi}
                         className="w-12 h-12 rounded"
                       />

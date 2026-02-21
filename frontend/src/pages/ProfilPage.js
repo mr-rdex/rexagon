@@ -128,7 +128,7 @@ const ProfilPage = () => {
         <div className="relative container mx-auto max-w-7xl px-4 flex items-end pb-6" style={{ minHeight: '180px' }}>
           <div className="flex items-center space-x-5">
             <img
-              src={profileUser.yetki_gorseli || `http://cravatar.eu/helmavatar/${profileUser.kullanici_adi}/80`}
+              src={profileUser.yetki_gorseli || `https://cravatar.eu/helmavatar/${profileUser.kullanici_adi}/80`}
               alt={profileUser.kullanici_adi}
               className="w-20 h-20 rounded-lg border-2 border-[#FDD500] shadow-lg"
               data-testid="profile-avatar"
