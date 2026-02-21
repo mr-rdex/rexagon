@@ -219,6 +219,11 @@ const AdminPage = () => {
                             <span className="text-[#FDD500] font-bold">{user.kredi.toFixed(0)} ₺</span>
                           </td>
                           <td className="p-4">
+                            <span className="px-3 py-1 rounded-full text-xs font-bold uppercase bg-zinc-800 text-zinc-300">
+                              {user.yetki || 'Oyuncu'}
+                            </span>
+                          </td>
+                          <td className="p-4">
                             <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase ${
                               user.rol === 'admin' ? 'bg-[#FDD500]/10 text-[#FDD500]' : 'bg-zinc-800 text-zinc-400'
                             }`}>
@@ -228,8 +233,18 @@ const AdminPage = () => {
                           <td className="p-4 text-right">
                             <button
                               onClick={() => {
-                                const newKredi = prompt('Yeni kredi miktarı:', user.kredi);
-                                if (newKredi !== null) handleUpdateUser(user.id, parseFloat(newKredi));
+                                const menu = `Düzenle:\n1. Kredi\n2. Yetki\n3. Yetki Görseli URL`;
+                                const choice = prompt(menu);
+                                if (choice === '1') {
+                                  const newKredi = prompt('Yeni kredi:', user.kredi);
+                                  if (newKredi !== null) handleUpdateUser(user.id, 'kredi', parseFloat(newKredi));
+                                } else if (choice === '2') {
+                                  const newYetki = prompt('Yeni yetki (Oyuncu/VIP/Moderatör/Yönetici):', user.yetki);
+                                  if (newYetki) handleUpdateUser(user.id, 'yetki', newYetki);
+                                } else if (choice === '3') {
+                                  const newGorsel = prompt('Yetki görseli URL:', user.yetki_gorseli || '');
+                                  if (newGorsel !== null) handleUpdateUser(user.id, 'yetki_gorseli', newGorsel);
+                                }
                               }}
                               className="text-[#FDD500] hover:text-[#E6C200] mr-3"
                               data-testid={`edit-user-${user.kullanici_adi}`}
