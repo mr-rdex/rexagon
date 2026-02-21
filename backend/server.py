@@ -60,6 +60,9 @@ class UserResponse(BaseModel):
     yetki: str
     yetki_gorseli: Optional[str] = None
     kayit_tarihi: str
+    acik_temalar: List[str] = []
+    aktif_tema_id: Optional[str] = None
+    aktif_tema_gorsel: Optional[str] = None
 
 class ForumKonu(BaseModel):
     baslik: str
