@@ -313,6 +313,18 @@ const AdminPage = () => {
                           onChange={(e) => setNewItem({ ...newItem, stok: parseInt(e.target.value) })}
                         />
                       </div>
+                      <div>
+                        <label className="block text-sm font-medium text-zinc-400 mb-2">İndirim (%)</label>
+                        <input
+                          type="number"
+                          min="0"
+                          max="100"
+                          className="w-full bg-[#2A2A2A] border border-zinc-700 text-white rounded-md px-4 py-3 focus:outline-none focus:border-[#FDD500] focus:ring-1 focus:ring-[#FDD500] transition-all"
+                          value={newItem.indirim}
+                          onChange={(e) => setNewItem({ ...newItem, indirim: parseInt(e.target.value) || 0 })}
+                          placeholder="0"
+                        />
+                      </div>
                       <div className="md:col-span-2">
                         <label className="block text-sm font-medium text-zinc-400 mb-2">Açıklama</label>
                         <textarea
