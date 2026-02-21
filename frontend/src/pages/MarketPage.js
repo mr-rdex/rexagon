@@ -214,6 +214,77 @@ const MarketPage = () => {
           )}
         </div>
       </div>
+
+      {/* Purchase Confirmation Modal */}
+      {showConfirmModal && selectedItem && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4" data-testid="purchase-modal">
+          <div className="bg-[#1E1E1E] border border-zinc-800 rounded-xl p-8 max-w-md w-full">
+            <h3 className="text-2xl font-bold text-white mb-6">Satın Alma Onayı</h3>
+            <div className="bg-[#2A2A2A] rounded-lg p-4 mb-6">
+              <div className="flex items-center space-x-4 mb-4">
+                {selectedItem.gorsel && (
+                  <img src={selectedItem.gorsel} alt={selectedItem.isim} className="w-16 h-16 rounded object-cover" />
+                )}
+                <div className="flex-1">
+                  <h4 className="text-white font-bold">{selectedItem.isim}</h4>
+                  <p className="text-xs text-zinc-400">{selectedItem.kategori}</p>
+                </div>
+              </div>
+              <div className="border-t border-zinc-700 pt-4 space-y-2">
+                <div className="flex justify-between text-sm">
+                  <span className="text-zinc-400">Fiyat:</span>
+                  <span className="text-white font-bold">
+                    {selectedItem.indirim > 0 && (
+                      <span className="text-zinc-500 line-through mr-2">{selectedItem.fiyat} ₺</span>
+                    )}
+                    {(selectedItem.indirim > 0 
+                      ? selectedItem.fiyat * (1 - selectedItem.indirim / 100) 
+                      : selectedItem.fiyat).toFixed(2)} ₺
+                  </span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span className="text-zinc-400">Mevcut Bakiye:</span>
+                  <span className="text-[#FDD500] font-bold">{user?.kredi.toFixed(2)} ₺</span>
+                </div>
+                <div className="flex justify-between text-sm pt-2 border-t border-zinc-700">
+                  <span className="text-zinc-400">Kalan Bakiye:</span>
+                  <span className="text-green-500 font-bold">
+                    {(user?.kredi - (selectedItem.indirim > 0 
+                      ? selectedItem.fiyat * (1 - selectedItem.indirim / 100) 
+                      : selectedItem.fiyat)).toFixed(2)} ₺
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div className="bg-[#FDD500]/10 border border-[#FDD500]/30 rounded-lg p-4 mb-6">
+              <p className="text-sm text-zinc-300">
+                <strong className="text-[#FDD500]">Not:</strong> Satın alma işleminiz tamamlandıktan sonra ürün otomatik olarak Minecraft sunucusuna gönderilecektir.
+              </p>
+            </div>
+            <div className="flex space-x-4">
+              <button
+                onClick={() => handlePurchase(selectedItem.id, selectedItem.indirim > 0 
+                  ? selectedItem.fiyat * (1 - selectedItem.indirim / 100) 
+                  : selectedItem.fiyat)}
+                disabled={purchasing === selectedItem.id}
+                className="flex-1 bg-[#FDD500] text-black font-bold uppercase tracking-wide px-6 py-3 rounded-lg hover:bg-[#E6C200] transition-all btn-3d disabled:opacity-50"
+                data-testid="confirm-purchase-button"
+              >
+                {purchasing === selectedItem.id ? 'Satın Alınıyor...' : 'Onayla'}
+              </button>
+              <button
+                onClick={() => {
+                  setShowConfirmModal(false);
+                  setSelectedItem(null);
+                }}
+                className="flex-1 bg-transparent border-2 border-zinc-700 text-zinc-400 font-bold uppercase tracking-wide px-6 py-3 rounded-lg hover:border-zinc-600 transition-all"
+              >
+                İptal
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
