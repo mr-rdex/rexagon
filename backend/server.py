@@ -543,12 +543,23 @@ async def get_all_users(admin: dict = Depends(get_admin_user)):
     return users
 
 @api_router.put("/admin/kullanici/{user_id}")
-async def update_user(user_id: str, kredi: Optional[float] = None, rol: Optional[str] = None, admin: dict = Depends(get_admin_user)):
+async def update_user(
+    user_id: str, 
+    kredi: Optional[float] = None, 
+    rol: Optional[str] = None,
+    yetki: Optional[str] = None,
+    yetki_gorseli: Optional[str] = None,
+    admin: dict = Depends(get_admin_user)
+):
     update_data = {}
     if kredi is not None:
         update_data["kredi"] = kredi
     if rol is not None:
         update_data["rol"] = rol
+    if yetki is not None:
+        update_data["yetki"] = yetki
+    if yetki_gorseli is not None:
+        update_data["yetki_gorseli"] = yetki_gorseli
     
     if update_data:
         await db.users.update_one({"id": user_id}, {"$set": update_data})
