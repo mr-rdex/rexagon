@@ -57,6 +57,8 @@ class UserResponse(BaseModel):
     kredi: float
     profil_arka_plani: Optional[str] = None
     rol: str
+    yetki: str
+    yetki_gorseli: Optional[str] = None
     kayit_tarihi: str
 
 class ForumKonu(BaseModel):
