@@ -77,11 +77,10 @@ const Navigation = () => {
           {/* User Actions */}
           <div className="hidden md:flex items-center space-x-4">
             {user ? (
-              <div className="relative">
+              <div className="relative" ref={profileMenuRef}>
                 <button
-                  onMouseEnter={() => setShowProfileMenu(true)}
-                  onMouseLeave={() => setShowProfileMenu(false)}
-                  className="flex items-center space-x-3 px-4 py-2 bg-[#1E1E1E] border border-zinc-800 rounded-lg hover:border-[#FDD500]/50 transition-all"
+                  onClick={() => setShowProfileMenu(!showProfileMenu)}
+                  className="flex items-center space-x-3 px-4 py-2 bg-[#1E1E1E] border border-zinc-800 rounded-xl hover:border-[#FDD500]/50 transition-all"
                   data-testid="profile-menu-button"
                 >
                   <img
@@ -97,9 +96,7 @@ const Navigation = () => {
 
                 {showProfileMenu && (
                   <div
-                    onMouseEnter={() => setShowProfileMenu(true)}
-                    onMouseLeave={() => setShowProfileMenu(false)}
-                    className="absolute right-0 top-full mt-2 w-56 bg-[#1E1E1E] border border-zinc-800 rounded-lg shadow-lg overflow-hidden"
+                    className="absolute right-0 top-full mt-2 w-56 bg-[#1E1E1E] border border-zinc-800 rounded-xl shadow-lg overflow-hidden transition-all duration-200"
                     data-testid="profile-dropdown"
                   >
                     <Link
