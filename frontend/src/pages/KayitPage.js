@@ -174,6 +174,47 @@ const KayitPage = () => {
           </div>
         </div>
       </div>
+
+      {/* Privacy Policy Modal */}
+      {showPrivacyModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4" data-testid="privacy-modal">
+          <div className="bg-[#1E1E1E] border border-zinc-800 rounded-xl p-8 max-w-2xl w-full max-h-[80vh] overflow-y-auto">
+            <h3 className="text-2xl font-bold text-white mb-6">Gizlilik Sözleşmesi</h3>
+            <div className="text-zinc-300 space-y-4 text-sm">
+              <p>
+                <strong className="text-white">1. Veri Toplama</strong><br />
+                Rexagon Minecraft Sunucusu olarak, kullanıcı adınız, e-posta adresiniz ve sunucu içi aktiviteleriniz gibi temel bilgileri topluyoruz.
+              </p>
+              <p>
+                <strong className="text-white">2. Veri Kullanımı</strong><br />
+                Topladığımız veriler sadece sunucu hizmetlerini sağlamak, güvenliği korumak ve kullanıcı deneyimini iyileştirmek için kullanılır.
+              </p>
+              <p>
+                <strong className="text-white">3. Veri Güvenliği</strong><br />
+                Kişisel verileriniz güvenli sunucularda saklanır ve üçüncü şahıslarla paylaşılmaz.
+              </p>
+              <p>
+                <strong className="text-white">4. Çerezler</strong><br />
+                Web sitemiz, kullanıcı deneyimini iyileştirmek için çerezler kullanmaktadır.
+              </p>
+              <p>
+                <strong className="text-white">5. Haklarınız</strong><br />
+                Kişisel verilerinize erişme, düzeltme veya silme hakkına sahipsiniz. Bu taleplerle ilgili bizimle iletişime geçebilirsiniz.
+              </p>
+              <p>
+                <strong className="text-white">6. İletişim</strong><br />
+                Sorularınız için: admin@rexagon.com.tr
+              </p>
+            </div>
+            <button
+              onClick={() => setShowPrivacyModal(false)}
+              className="mt-6 w-full bg-[#FDD500] text-black font-bold uppercase tracking-wide px-6 py-3 rounded-lg hover:bg-[#E6C200] transition-all btn-3d"
+            >
+              Kapat
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
