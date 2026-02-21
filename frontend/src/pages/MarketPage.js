@@ -112,9 +112,9 @@ const MarketPage = () => {
         {/* Category Filter */}
         <div className="flex items-center space-x-4 mb-8 overflow-x-auto pb-4">
           <button
-            onClick={() => setSelectedCategory(null)}
-            className={`px-6 py-3 rounded-sm font-bold uppercase tracking-wide transition-all whitespace-nowrap ${
-              !selectedCategory
+            onClick={() => setSelectedCategory('Tümü')}
+            className={`px-6 py-3 rounded-lg font-bold uppercase tracking-wide transition-all whitespace-nowrap ${
+              selectedCategory === 'Tümü' || !selectedCategory
                 ? 'bg-[#FDD500] text-black btn-3d'
                 : 'bg-[#1E1E1E] border border-zinc-800 text-zinc-400 hover:border-[#FDD500]/50'
             }`}
@@ -122,11 +122,22 @@ const MarketPage = () => {
           >
             Tümü
           </button>
+          <button
+            onClick={() => setSelectedCategory('En Çok Satanlar')}
+            className={`px-6 py-3 rounded-lg font-bold uppercase tracking-wide transition-all whitespace-nowrap ${
+              selectedCategory === 'En Çok Satanlar'
+                ? 'bg-[#FDD500] text-black btn-3d'
+                : 'bg-[#1E1E1E] border border-zinc-800 text-zinc-400 hover:border-[#FDD500]/50'
+            }`}
+            data-testid="category-best-sellers"
+          >
+            En Çok Satanlar
+          </button>
           {categories.map((cat) => (
             <button
               key={cat.id}
               onClick={() => setSelectedCategory(cat.isim)}
-              className={`px-6 py-3 rounded-sm font-bold uppercase tracking-wide transition-all whitespace-nowrap ${
+              className={`px-6 py-3 rounded-lg font-bold uppercase tracking-wide transition-all whitespace-nowrap ${
                 selectedCategory === cat.isim
                   ? 'bg-[#FDD500] text-black btn-3d'
                   : 'bg-[#1E1E1E] border border-zinc-800 text-zinc-400 hover:border-[#FDD500]/50'
