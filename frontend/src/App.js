@@ -1,53 +1,94 @@
-import { useEffect } from "react";
-import "@/App.css";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import axios from "axios";
+import React, { useState, useEffect, createContext, useContext } from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import axios from 'axios';
+import './App.css';
+import Navigation from './components/Navigation';
+import HomePage from './pages/HomePage';
+import KayitPage from './pages/KayitPage';
+import GirisPage from './pages/GirisPage';
+import ForumPage from './pages/ForumPage';
+import ForumKategoriPage from './pages/ForumKategoriPage';
+import ForumKonuPage from './pages/ForumKonuPage';
+import MarketPage from './pages/MarketPage';
+import ProfilPage from './pages/ProfilPage';
+import SiralamaPage from './pages/SiralamaPage';
+import AdminPage from './pages/AdminPage';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
 
-const Home = () => {
-  const helloWorldApi = async () => {
-    try {
-      const response = await axios.get(`${API}/`);
-      console.log(response.data.message);
-    } catch (e) {
-      console.error(e, `errored out requesting / api`);
-    }
-  };
+export const AuthContext = createContext();
 
-  useEffect(() => {
-    helloWorldApi();
-  }, []);
-
-  return (
-    <div>
-      <header className="App-header">
-        <a
-          className="App-link"
-          href="https://emergent.sh"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <img src="https://avatars.githubusercontent.com/in/1201222?s=120&u=2686cf91179bbafbc7a71bfbc43004cf9ae1acea&v=4" />
-        </a>
-        <p className="mt-5">Building something incredible ~!</p>
-      </header>
-    </div>
-  );
-};
+export const useAuth = () => useContext(AuthContext);
 
 function App() {
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      axios.get(`${API}/auth/me`, {
+        headers: { Authorization: `Bearer ${token}` }
+      })
+        .then(response => {
+          setUser(response.data);
+        })
+        .catch(() => {
+          localStorage.removeItem('token');
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    } else {
+      setLoading(false);
+    }
+  }, []);
+
+  const login = (token) => {
+    localStorage.setItem('token', token);
+    axios.get(`${API}/auth/me`, {
+      headers: { Authorization: `Bearer ${token}` }
+    }).then(response => {
+      setUser(response.data);
+    });
+  };
+
+  const logout = () => {
+    localStorage.removeItem('token');
+    setUser(null);
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-[#222222] flex items-center justify-center">
+        <div className="text-[#FDD500] text-2xl font-bold">Yükleniyor...</div>
+      </div>
+    );
+  }
+
   return (
-    <div className="App">
+    <AuthContext.Provider value={{ user, login, logout, API, BACKEND_URL }}>
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Home />}>
-            <Route index element={<Home />} />
-          </Route>
-        </Routes>
+        <div className="App">
+          <Navigation />
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/kayit" element={<KayitPage />} />
+            <Route path="/giris" element={<GirisPage />} />
+            <Route path="/forum" element={<ForumPage />} />
+            <Route path="/forum/:kategori" element={<ForumKategoriPage />} />
+            <Route path="/forum/konu/:id" element={<ForumKonuPage />} />
+            <Route path="/market" element={<MarketPage />} />
+            <Route path="/market/:kategori" element={<MarketPage />} />
+            <Route path="/profil" element={user ? <ProfilPage /> : <Navigate to="/giris" />} />
+            <Route path="/profil/:kullanici_adi" element={<ProfilPage />} />
+            <Route path="/siralama" element={<SiralamaPage />} />
+            <Route path="/admin" element={user?.rol === 'admin' ? <AdminPage /> : <Navigate to="/" />} />
+          </Routes>
+        </div>
       </BrowserRouter>
-    </div>
+    </AuthContext.Provider>
   );
 }
 
