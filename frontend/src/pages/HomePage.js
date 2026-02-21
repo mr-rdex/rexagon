@@ -76,18 +76,33 @@ const HomePage = () => {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               to="/kayit"
-              className="bg-[#FDD500] text-black font-bold uppercase tracking-wide px-8 py-4 rounded-sm hover:bg-[#E6C200] transition-all btn-3d text-center"
+              className="bg-[#FDD500] text-black font-bold uppercase tracking-wide px-8 py-4 rounded-lg hover:bg-[#E6C200] transition-all btn-3d text-center"
               data-testid="hero-register-button"
             >
               Hemen Kayıt Ol
             </Link>
             <Link
               to="/market"
-              className="bg-transparent border-2 border-[#FDD500] text-[#FDD500] font-bold uppercase tracking-wide px-8 py-4 rounded-sm hover:bg-[#FDD500]/10 transition-all text-center"
+              className="bg-transparent border-2 border-[#FDD500] text-[#FDD500] font-bold uppercase tracking-wide px-8 py-4 rounded-lg hover:bg-[#FDD500]/10 transition-all text-center"
               data-testid="hero-market-button"
             >
               Market'e Göz At
             </Link>
+          </div>
+          {/* Server Stats */}
+          <div className="flex flex-wrap justify-center gap-6 mt-12">
+            <div className="bg-[#1E1E1E]/80 backdrop-blur-md border border-white/10 rounded-xl px-8 py-4 hover:shadow-[0_0_30px_rgba(255,255,255,0.1)] transition-all">
+              <div className="text-center">
+                <p className="text-3xl font-black text-[#FDD500]">{stats.aktif_oyuncu}</p>
+                <p className="text-sm text-zinc-400 uppercase tracking-wider mt-1">Aktif Oyuncu</p>
+              </div>
+            </div>
+            <div className="bg-[#1E1E1E]/80 backdrop-blur-md border border-white/10 rounded-xl px-8 py-4 hover:shadow-[0_0_30px_rgba(255,255,255,0.1)] transition-all">
+              <div className="text-center">
+                <p className="text-3xl font-black text-[#FDD500]">{stats.kayitli_oyuncu}</p>
+                <p className="text-sm text-zinc-400 uppercase tracking-wider mt-1">Kayıtlı Oyuncu</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
