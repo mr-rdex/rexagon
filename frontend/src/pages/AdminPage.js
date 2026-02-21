@@ -196,6 +196,7 @@ const AdminPage = () => {
                         <th className="text-left p-4 text-zinc-400 text-sm uppercase tracking-wider">Kullanıcı</th>
                         <th className="text-left p-4 text-zinc-400 text-sm uppercase tracking-wider">Email</th>
                         <th className="text-left p-4 text-zinc-400 text-sm uppercase tracking-wider">Kredi</th>
+                        <th className="text-left p-4 text-zinc-400 text-sm uppercase tracking-wider">Yetki</th>
                         <th className="text-left p-4 text-zinc-400 text-sm uppercase tracking-wider">Rol</th>
                         <th className="text-right p-4 text-zinc-400 text-sm uppercase tracking-wider">İşlemler</th>
                       </tr>
