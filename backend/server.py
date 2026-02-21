@@ -207,6 +207,10 @@ async def get_user_profile(kullanici_adi: str):
     user = await db.users.find_one({"kullanici_adi": kullanici_adi}, {"_id": 0, "sifre_hash": 0})
     if not user:
         raise HTTPException(status_code=404, detail="Kullanıcı bulunamadı")
+    # Ensure theme fields exist
+    user.setdefault("acik_temalar", [])
+    user.setdefault("aktif_tema_id", None)
+    user.setdefault("aktif_tema_gorsel", None)
     return user
 
 @api_router.put("/users/profil")
