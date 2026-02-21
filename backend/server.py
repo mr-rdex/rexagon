@@ -386,8 +386,11 @@ async def get_market_categories():
 
 @api_router.get("/market/{kategori}/urunler")
 async def get_market_items(kategori: Optional[str] = None):
-    query = {"kategori": kategori} if kategori else {}
-    items = await db.market_items.find(query, {"_id": 0}).to_list(100)
+    if kategori and kategori != "Tümü":
+        query = {"kategori": kategori}
+    else:
+        query = {}
+    items = await db.market_items.find(query, {"_id": 0}).to_list(1000)
     return items
 
 @api_router.get("/market/urun/{urun_id}")
