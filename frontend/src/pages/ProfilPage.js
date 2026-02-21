@@ -28,6 +28,8 @@ const ProfilPage = () => {
       }
     } catch (error) {
       console.error('Profil yüklenemedi:', error);
+      // Set error state if user not found
+      setProfileUser(null);
     } finally {
       setLoading(false);
     }
