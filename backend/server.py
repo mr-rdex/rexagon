@@ -188,7 +188,13 @@ async def kayit_ol(user: UserRegister):
         "yetki": "Oyuncu",
         "yetki_gorseli": None,
         "dogum_tarihi": user.dogum_tarihi,
-        "kayit_tarihi": datetime.now(timezone.utc).isoformat()
+        "kayit_tarihi": datetime.now(timezone.utc).isoformat(),
+        "acik_temalar": [],
+        "aktif_tema_id": None,
+        "aktif_tema_gorsel": None,
+        "biyografi": None,
+        "ada_seviyesi": 0,
+        "dinar": 0.0
     }
     
     await db.users.insert_one(user_doc)
