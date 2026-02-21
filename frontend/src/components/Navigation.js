@@ -1,13 +1,20 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../App';
-import { Menu, X, User, LogOut, Shield, Wallet, Settings, Copy, Check } from 'lucide-react';
+import axios from 'axios';
+import { Menu, X as XIcon, User, LogOut, Shield, Wallet, Settings, Copy, Check } from 'lucide-react';
 
 const Navigation = () => {
-  const { user, logout } = useAuth();
+  const { user, logout, API } = useAuth();
   const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
+  const [settingsTab, setSettingsTab] = useState('bio');
+  const [bio, setBio] = useState('');
+  const [oldPassword, setOldPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [saving, setSaving] = useState(false);
   const [copied, setCopied] = useState(false);
   const profileMenuRef = useRef(null);
 
