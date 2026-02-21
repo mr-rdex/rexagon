@@ -142,7 +142,15 @@ const KayitPage = () => {
                 data-testid="privacy-checkbox"
               />
               <label htmlFor="gizlilik_sozlesmesi" className="text-sm text-zinc-400">
-                Gizlilik sözleşmesini ve kullanım koşullarını kabul ediyorum
+                <button
+                  type="button"
+                  onClick={() => setShowPrivacyModal(true)}
+                  className="text-[#FDD500] hover:text-[#E6C200] underline"
+                  data-testid="privacy-link"
+                >
+                  Gizlilik sözleşmesini
+                </button>
+                {' '}ve kullanım koşullarını kabul ediyorum
               </label>
             </div>
 
