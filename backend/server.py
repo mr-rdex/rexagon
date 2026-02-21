@@ -689,6 +689,8 @@ async def startup_event():
             "kredi": 99999.0,
             "profil_arka_plani": None,
             "rol": "admin",
+            "yetki": "Yönetici",
+            "yetki_gorseli": None,
             "dogum_tarihi": "2000-01-01",
             "kayit_tarihi": datetime.now(timezone.utc).isoformat()
         }
