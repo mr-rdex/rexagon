@@ -271,6 +271,69 @@ const Navigation = () => {
         )}
       </div>
     </nav>
+
+    {/* Profile Settings Modal */}
+    {showSettings && (
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4" data-testid="settings-modal">
+        <div className="bg-[#1E1E1E] border border-zinc-800 rounded-xl p-8 max-w-lg w-full">
+          <div className="flex items-center justify-between mb-6">
+            <h3 className="text-2xl font-bold text-white">Profil Ayarları</h3>
+            <button onClick={() => setShowSettings(false)} className="text-zinc-400 hover:text-white" data-testid="close-settings-modal"><XIcon size={24} /></button>
+          </div>
+
+          {/* Tabs */}
+          <div className="flex space-x-3 mb-6">
+            <button onClick={() => setSettingsTab('bio')} className={`px-4 py-2 rounded-lg text-sm font-bold uppercase transition-all ${settingsTab === 'bio' ? 'bg-[#FDD500] text-black' : 'bg-[#2A2A2A] text-zinc-400 hover:text-white'}`} data-testid="settings-tab-bio">Biyografi</button>
+            <button onClick={() => setSettingsTab('password')} className={`px-4 py-2 rounded-lg text-sm font-bold uppercase transition-all ${settingsTab === 'password' ? 'bg-[#FDD500] text-black' : 'bg-[#2A2A2A] text-zinc-400 hover:text-white'}`} data-testid="settings-tab-password">Şifre Değiştir</button>
+          </div>
+
+          {settingsTab === 'bio' && (
+            <form onSubmit={async (e) => {
+              e.preventDefault();
+              setSaving(true);
+              try {
+                const token = localStorage.getItem('token');
+                await axios.put(`${API}/users/biyografi`, { biyografi: bio }, { headers: { Authorization: `Bearer ${token}` } });
+                alert('Biyografi güncellendi!');
+                setShowSettings(false);
+                window.location.reload();
+              } catch (err) { alert('Güncelleme başarısız'); } finally { setSaving(false); }
+            }} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-zinc-400 mb-2">Biyografi</label>
+                <textarea rows={4} className="w-full bg-[#2A2A2A] border border-zinc-700 text-white rounded-md px-4 py-3 focus:outline-none focus:border-[#FDD500] focus:ring-1 focus:ring-[#FDD500] transition-all" value={bio} onChange={(e) => setBio(e.target.value)} placeholder="Kendiniz hakkında bir şeyler yazın..." data-testid="bio-input" />
+              </div>
+              <button type="submit" disabled={saving} className="w-full bg-[#FDD500] text-black font-bold uppercase tracking-wide px-6 py-3 rounded-lg hover:bg-[#E6C200] transition-all btn-3d disabled:opacity-50" data-testid="save-bio-button">{saving ? 'Kaydediliyor...' : 'Kaydet'}</button>
+            </form>
+          )}
+
+          {settingsTab === 'password' && (
+            <form onSubmit={async (e) => {
+              e.preventDefault();
+              if (newPassword.length < 6) { alert('Yeni şifre en az 6 karakter olmalıdır'); return; }
+              setSaving(true);
+              try {
+                const token = localStorage.getItem('token');
+                await axios.put(`${API}/users/sifre`, { eski_sifre: oldPassword, yeni_sifre: newPassword }, { headers: { Authorization: `Bearer ${token}` } });
+                alert('Şifre başarıyla değiştirildi!');
+                setOldPassword(''); setNewPassword(''); setShowSettings(false);
+              } catch (err) { alert(err.response?.data?.detail || 'Şifre değiştirilemedi'); } finally { setSaving(false); }
+            }} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-zinc-400 mb-2">Mevcut Şifre</label>
+                <input type="password" required className="w-full bg-[#2A2A2A] border border-zinc-700 text-white rounded-md px-4 py-3 focus:outline-none focus:border-[#FDD500] focus:ring-1 focus:ring-[#FDD500] transition-all" value={oldPassword} onChange={(e) => setOldPassword(e.target.value)} data-testid="old-password-input" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-zinc-400 mb-2">Yeni Şifre</label>
+                <input type="password" required minLength={6} className="w-full bg-[#2A2A2A] border border-zinc-700 text-white rounded-md px-4 py-3 focus:outline-none focus:border-[#FDD500] focus:ring-1 focus:ring-[#FDD500] transition-all" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} data-testid="new-password-input" />
+              </div>
+              <button type="submit" disabled={saving} className="w-full bg-[#FDD500] text-black font-bold uppercase tracking-wide px-6 py-3 rounded-lg hover:bg-[#E6C200] transition-all btn-3d disabled:opacity-50" data-testid="change-password-button">{saving ? 'Değiştiriliyor...' : 'Şifreyi Değiştir'}</button>
+            </form>
+          )}
+        </div>
+      </div>
+    )}
+    </>
   );
 };
 
