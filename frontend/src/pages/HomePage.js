@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../App';
-import { Trophy, Clock, ShoppingBag, Coins, ArrowRight, Copy, Check } from 'lucide-react';
+import { Trophy, Clock, ShoppingBag, Coins, Copy, Check } from 'lucide-react';
 
 const HomePage = () => {
   const { API } = useAuth();
@@ -68,12 +68,12 @@ const HomePage = () => {
     <div className="min-h-screen pt-24 pb-16 px-4" data-testid="home-page">
       {/* Hero Section */}
       <div className="relative mb-16 overflow-hidden rounded-xl" style={{
-        backgroundImage: 'url(/images/hero-bg.png)',
+        backgroundImage: 'url(/images/hero-bg.jpg)',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         minHeight: '500px'
       }}>
-        <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-transparent to-[#222222]"></div>
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/30 to-[#222222]"></div>
         <div className="relative container mx-auto max-w-7xl px-6 py-20 text-center z-10">
           <h1 className="text-5xl md:text-7xl font-black tracking-tighter uppercase text-white mb-6" data-testid="hero-title">
             Rexagon'a <span className="text-[#FDD500]">Hoş Geldin</span>
@@ -166,7 +166,7 @@ const HomePage = () => {
                     />
                     <span className="text-white font-medium">{user.kullanici_adi}</span>
                   </div>
-                  <span className="text-[#FDD500] font-bold">{user.kredi.toFixed(0)} ₺</span>
+                  <span className="text-[#FDD500] font-bold">{user.kredi.toFixed(0)} Kredi</span>
                 </Link>
               ))}
             </div>
@@ -213,7 +213,7 @@ const HomePage = () => {
                       <span className="text-white font-medium">{purchase.kullanici_adi}</span>
                       <span className="text-xs text-zinc-500">{purchase.urun_adi}</span>
                     </div>
-                    <span className="text-[#FDD500] font-bold">{purchase.toplam_fiyat} ₺</span>
+                    <span className="text-[#FDD500] font-bold">{purchase.toplam_fiyat} Kredi</span>
                   </div>
                 ))
               ) : (
@@ -233,30 +233,13 @@ const HomePage = () => {
                 sonKrediYuklemeler.map((transaction, index) => (
                   <div key={index} className="flex items-center justify-between p-3 bg-[#2A2A2A] rounded">
                     <span className="text-white font-medium">{transaction.kullanici_adi}</span>
-                    <span className="text-[#FDD500] font-bold">+{transaction.tutar} ₺</span>
+                    <span className="text-[#FDD500] font-bold">+{transaction.tutar} Kredi</span>
                   </div>
                 ))
               ) : (
                 <p className="text-zinc-500 text-sm">Henüz kredi yükleme yok</p>
               )}
             </div>
-          </div>
-        </div>
-
-        {/* CTA Section */}
-        <div className="mt-16 bg-gradient-to-r from-[#FDD500]/10 to-transparent border border-[#FDD500]/30 rounded-lg p-8">
-          <div className="flex flex-col md:flex-row items-center justify-between">
-            <div>
-              <h3 className="text-3xl font-bold uppercase text-white mb-2">Hemen Başla!</h3>
-              <p className="text-zinc-400">Topluluğumuza katıl ve eğlenceyi yaşa</p>
-            </div>
-            <Link
-              to="/kayit"
-              className="mt-4 md:mt-0 bg-[#FDD500] text-black font-bold uppercase tracking-wide px-8 py-4 rounded-sm hover:bg-[#E6C200] transition-all btn-3d flex items-center space-x-2"
-            >
-              <span>Kayıt Ol</span>
-              <ArrowRight size={20} />
-            </Link>
           </div>
         </div>
       </div>
