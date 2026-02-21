@@ -97,7 +97,7 @@ const AdminPage = () => {
       await axios.post(`${API}/admin/market/urun`, newItem, { headers });
       alert('Ürün oluşturuldu');
       setShowNewItem(false);
-      setNewItem({ isim: '', aciklama: '', fiyat: 0, kategori: "VIP'ler", stok: 100, gorsel: '' });
+      setNewItem({ isim: '', aciklama: '', fiyat: 0, kategori: "VIP'ler", stok: 100, gorsel: '', indirim: 0 });
       fetchMarketItems();
     } catch (error) {
       alert('Ürün oluşturulamadı');
