@@ -152,12 +152,19 @@ const MarketPage = () => {
         {/* Items Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {items.length > 0 ? (
-            items.map((item) => (
+            items.map((item) => {
+              const finalPrice = item.indirim > 0 ? item.fiyat * (1 - item.indirim / 100) : item.fiyat;
+              return (
               <div
                 key={item.id}
-                className="bg-[#1E1E1E] border border-zinc-800 rounded-lg overflow-hidden hover:border-[#FDD500]/50 transition-colors group"
+                className="bg-[#1E1E1E] border border-zinc-800 rounded-xl overflow-hidden hover:border-[#FDD500]/50 hover:shadow-[0_0_30px_rgba(255,255,255,0.1)] transition-all group relative"
                 data-testid="market-item-card"
               >
+                {item.indirim > 0 && (
+                  <div className="absolute top-4 right-4 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full z-10">
+                    %{item.indirim} İNDİRİM
+                  </div>
+                )}
                 {item.gorsel && (
                   <div className="aspect-video bg-[#2A2A2A] overflow-hidden">
                     <img
@@ -178,29 +185,27 @@ const MarketPage = () => {
                   </div>
                   <p className="text-sm text-zinc-400 mb-4 line-clamp-2">{item.aciklama}</p>
                   <div className="flex items-center justify-between mb-4">
-                    <div>
-                      <span className="text-2xl font-bold text-[#FDD500]">{item.fiyat} ₺</span>
+                    <div className="flex flex-col">
+                      {item.indirim > 0 && (
+                        <span className="text-sm text-zinc-500 line-through">{item.fiyat} ₺</span>
+                      )}
+                      <span className="text-2xl font-bold text-[#FDD500]">{finalPrice.toFixed(2)} ₺</span>
                     </div>
                     <span className="text-xs text-zinc-500">Stok: {item.stok}</span>
                   </div>
                   <button
-                    onClick={() => handlePurchase(item.id, item.fiyat)}
-                    disabled={item.stok <= 0 || purchasing === item.id}
-                    className="w-full bg-[#FDD500] text-black font-bold uppercase tracking-wide px-6 py-3 rounded-sm hover:bg-[#E6C200] transition-all btn-3d disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
+                    onClick={() => openConfirmModal(item)}
+                    disabled={item.stok <= 0}
+                    className="w-full bg-[#FDD500] text-black font-bold uppercase tracking-wide px-6 py-3 rounded-lg hover:bg-[#E6C200] transition-all btn-3d disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
                     data-testid="purchase-button"
                   >
                     <ShoppingCart size={20} />
-                    <span>
-                      {purchasing === item.id
-                        ? 'Satın alınıyor...'
-                        : item.stok <= 0
-                        ? 'Stokta Yok'
-                        : 'Satın Al'}
-                    </span>
+                    <span>{item.stok <= 0 ? 'Stokta Yok' : 'Satın Al'}</span>
                   </button>
                 </div>
               </div>
-            ))
+            );
+            })
           ) : (
             <div className="col-span-3 text-center py-12">
               <Package className="mx-auto text-zinc-600 mb-4" size={48} />
