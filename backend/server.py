@@ -63,6 +63,9 @@ class UserResponse(BaseModel):
     acik_temalar: List[str] = []
     aktif_tema_id: Optional[str] = None
     aktif_tema_gorsel: Optional[str] = None
+    biyografi: Optional[str] = None
+    ada_seviyesi: int = 0
+    dinar: float = 0
 
 class ForumKonu(BaseModel):
     baslik: str
