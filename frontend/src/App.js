@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import axios from 'axios';
 import './App.css';
 import Navigation from './components/Navigation';
+import Footer from './components/Footer';
 import HomePage from './pages/HomePage';
 import KayitPage from './pages/KayitPage';
 import GirisPage from './pages/GirisPage';
