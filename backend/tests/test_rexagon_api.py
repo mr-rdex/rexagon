@@ -342,6 +342,30 @@ class TestLeaderboard:
         data = response.json()
         assert isinstance(data, list)
         print(f"PASS: Latest users: {len(data)} entries")
+    
+    def test_get_top_island_level(self):
+        """GET /api/leaderboard/ada-seviyesi returns top island level users (New Feature)"""
+        response = requests.get(f"{BASE_URL}/api/leaderboard/ada-seviyesi")
+        assert response.status_code == 200
+        data = response.json()
+        assert isinstance(data, list)
+        # Verify user data has ada_seviyesi field
+        if len(data) > 0:
+            assert "ada_seviyesi" in data[0], "User should have ada_seviyesi field"
+            assert "kullanici_adi" in data[0], "User should have kullanici_adi field"
+        print(f"PASS: Leaderboard ada-seviyesi: {len(data)} entries")
+    
+    def test_get_top_dinar(self):
+        """GET /api/leaderboard/dinar returns top dinar users (New Feature)"""
+        response = requests.get(f"{BASE_URL}/api/leaderboard/dinar")
+        assert response.status_code == 200
+        data = response.json()
+        assert isinstance(data, list)
+        # Verify user data has dinar field
+        if len(data) > 0:
+            assert "dinar" in data[0], "User should have dinar field"
+            assert "kullanici_adi" in data[0], "User should have kullanici_adi field"
+        print(f"PASS: Leaderboard dinar: {len(data)} entries")
 
 
 class TestNews:
