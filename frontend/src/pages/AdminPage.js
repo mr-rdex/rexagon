@@ -20,7 +20,8 @@ const AdminPage = () => {
     fiyat: 0,
     kategori: "VIP'ler",
     stok: 100,
-    gorsel: ''
+    gorsel: '',
+    indirim: 0
   });
   const [newNews, setNewNews] = useState({ baslik: '', icerik: '' });
 
