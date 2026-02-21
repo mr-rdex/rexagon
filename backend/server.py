@@ -85,6 +85,16 @@ class Haber(BaseModel):
 class KrediYukle(BaseModel):
     tutar: float
 
+class ReportCreate(BaseModel):
+    baslik: str
+    aciklama: str
+    konu: str
+
+class ThemeCreate(BaseModel):
+    isim: str
+    gorsel_url: str
+    fiyat: float = 0
+
 # ============ AUTH HELPERS ============
 
 def verify_password(plain_password, hashed_password):
