@@ -185,7 +185,7 @@ const ForumKategoriPage = () => {
               <p className="text-zinc-400">Bu kategoride henüz konu yok</p>
               {user && (
                 <button
-                  onClick={() => setShowNewTopic(true);
+                  onClick={() => setShowNewTopic(true)}
                   className="mt-4 text-[#FDD500] hover:text-[#E6C200] font-medium"
                 >
                   İlk konuyu sen aç
