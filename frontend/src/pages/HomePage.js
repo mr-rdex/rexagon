@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../App';
-import { Trophy, Clock, ShoppingBag, Coins, ArrowRight } from 'lucide-react';
+import { Trophy, Clock, ShoppingBag, Coins, ArrowRight, Copy, Check } from 'lucide-react';
 
 const HomePage = () => {
   const { API } = useAuth();
@@ -13,6 +13,13 @@ const HomePage = () => {
   const [haberler, setHaberler] = useState([]);
   const [stats, setStats] = useState({ kayitli_oyuncu: 0, aktif_oyuncu: 0 });
   const [loading, setLoading] = useState(true);
+  const [copied, setCopied] = useState(false);
+
+  const handleCopyIP = () => {
+    navigator.clipboard.writeText('play.rexagon.com.tr');
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
