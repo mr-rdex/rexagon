@@ -166,11 +166,11 @@ const MarketPage = () => {
                   </div>
                 )}
                 {item.gorsel && (
-                  <div className="aspect-video bg-[#2A2A2A] overflow-hidden">
+                  <div className="bg-[#2A2A2A] overflow-hidden flex items-center justify-center p-4" style={{ height: '200px' }}>
                     <img
                       src={item.gorsel}
                       alt={item.isim}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      className="max-w-full max-h-full object-contain group-hover:scale-105 transition-transform duration-300"
                     />
                   </div>
                 )}
