@@ -143,6 +143,9 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
     user.setdefault("acik_temalar", [])
     user.setdefault("aktif_tema_id", None)
     user.setdefault("aktif_tema_gorsel", None)
+    user.setdefault("biyografi", None)
+    user.setdefault("ada_seviyesi", 0)
+    user.setdefault("dinar", 0)
     return user
 
 async def get_admin_user(current_user: dict = Depends(get_current_user)):
