@@ -70,9 +70,11 @@ const AdminPage = () => {
     }
   };
 
-  const handleUpdateUser = async (userId, kredi) => {
+  const handleUpdateUser = async (userId, field, value) => {
     try {
-      await axios.put(`${API}/admin/kullanici/${userId}?kredi=${kredi}`, {}, { headers });
+      const params = new URLSearchParams();
+      params.append(field, value);
+      await axios.put(`${API}/admin/kullanici/${userId}?${params.toString()}`, {}, { headers });
       alert('Kullanıcı güncellendi');
       fetchUsers();
     } catch (error) {
