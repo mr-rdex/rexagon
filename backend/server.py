@@ -377,6 +377,41 @@ async def create_forum_reply(konu_id: str, cevap: ForumCevap, current_user: dict
     await db.forum_replies.insert_one(cevap_doc)
     return {"message": "Cevap eklendi", "id": cevap_id}
 
+@api_router.get("/stats")
+async def get_server_stats():
+    total_users = await db.users.count_documents({})
+    # Active players will be fetched from Minecraft server API in future
+    return {
+        "kayitli_oyuncu": total_users,
+        "aktif_oyuncu": 0  # Placeholder for Minecraft server API
+    }
+
+# ============ WALLET/CREDIT ROUTES ============
+
+@api_router.get("/cuzdan/gecmis")
+async def get_wallet_history(current_user: dict = Depends(get_current_user)):
+    transactions = await db.credit_transactions.find(
+        {"kullanici_id": current_user["id"]},
+        {"_id": 0}
+    ).sort("tarih", -1).to_list(100)
+    return transactions
+
+@api_router.post("/cuzdan/yukle")
+async def load_wallet(tutar: float, current_user: dict = Depends(get_current_user)):
+    # This will integrate with PayTR/Shopier
+    # For now, just create a pending transaction
+    transaction_id = str(uuid.uuid4())
+    transaction = {
+        "id": transaction_id,
+        "kullanici_id": current_user["id"],
+        "tutar": tutar,
+        "tip": "yukleme",
+        "durum": "beklemede",
+        "tarih": datetime.now(timezone.utc).isoformat()
+    }
+    await db.credit_transactions.insert_one(transaction)
+    return {"message": "Ödeme başlatıldı", "transaction_id": transaction_id}
+
 # ============ MARKET ROUTES ============
 
 @api_router.get("/market/kategoriler")
