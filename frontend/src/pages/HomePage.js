@@ -116,7 +116,7 @@ const HomePage = () => {
               {haberler.map((haber) => (
                 <div
                   key={haber.id}
-                  className="bg-[#1E1E1E] border border-zinc-800 rounded-lg p-6 hover:border-[#FDD500]/50 transition-colors group"
+                  className="bg-[#1E1E1E] border border-zinc-800 rounded-xl p-6 hover:border-[#FDD500]/50 hover:shadow-[0_0_30px_rgba(255,255,255,0.1)] transition-all group"
                   data-testid="news-card"
                 >
                   <div className="flex items-center justify-between mb-4">
