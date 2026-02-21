@@ -426,5 +426,120 @@ class TestForumAPI:
         print(f"PASS: Forum categories: {len(data)} categories")
 
 
+class TestUserProfileAPI:
+    """Tests for user profile update endpoints (New Features in Iteration 3)"""
+    
+    def test_update_biography_requires_auth(self):
+        """PUT /api/users/biyografi requires authentication"""
+        response = requests.put(f"{BASE_URL}/api/users/biyografi", json={
+            "biyografi": "Test bio"
+        })
+        assert response.status_code == 401
+        print("PASS: Update biography requires authentication")
+    
+    def test_update_biography_success(self):
+        """PUT /api/users/biyografi updates user biography when authenticated"""
+        # Login as admin
+        login_response = requests.post(f"{BASE_URL}/api/auth/giris", json={
+            "kullanici_adi": ADMIN_USERNAME,
+            "sifre": ADMIN_PASSWORD
+        })
+        token = login_response.json()["access_token"]
+        
+        # Update biography
+        test_bio = "TEST_Bio_Iteration3"
+        response = requests.put(f"{BASE_URL}/api/users/biyografi", 
+            json={"biyografi": test_bio},
+            headers={"Authorization": f"Bearer {token}"}
+        )
+        assert response.status_code == 200
+        data = response.json()
+        assert data["message"] == "Biyografi güncellendi"
+        
+        # Verify by fetching user profile
+        profile_response = requests.get(f"{BASE_URL}/api/users/{ADMIN_USERNAME}")
+        assert profile_response.status_code == 200
+        profile_data = profile_response.json()
+        assert profile_data["biyografi"] == test_bio
+        print("PASS: Biography updated and verified")
+    
+    def test_change_password_requires_auth(self):
+        """PUT /api/users/sifre requires authentication"""
+        response = requests.put(f"{BASE_URL}/api/users/sifre", json={
+            "eski_sifre": "old",
+            "yeni_sifre": "new123"
+        })
+        assert response.status_code == 401
+        print("PASS: Change password requires authentication")
+    
+    def test_change_password_wrong_old_password(self):
+        """PUT /api/users/sifre rejects wrong old password"""
+        # Login as admin
+        login_response = requests.post(f"{BASE_URL}/api/auth/giris", json={
+            "kullanici_adi": ADMIN_USERNAME,
+            "sifre": ADMIN_PASSWORD
+        })
+        token = login_response.json()["access_token"]
+        
+        # Try to change password with wrong old password
+        response = requests.put(f"{BASE_URL}/api/users/sifre", 
+            json={"eski_sifre": "WrongPassword123", "yeni_sifre": "NewPassword123!"},
+            headers={"Authorization": f"Bearer {token}"}
+        )
+        assert response.status_code == 400
+        data = response.json()
+        assert data["detail"] == "Mevcut şifre hatalı"
+        print("PASS: Wrong old password correctly rejected")
+    
+    def test_change_password_success(self):
+        """PUT /api/users/sifre changes password with correct old password"""
+        # Login as admin
+        login_response = requests.post(f"{BASE_URL}/api/auth/giris", json={
+            "kullanici_adi": ADMIN_USERNAME,
+            "sifre": ADMIN_PASSWORD
+        })
+        token = login_response.json()["access_token"]
+        
+        # Change password
+        new_password = "TempTestPass123!"
+        response = requests.put(f"{BASE_URL}/api/users/sifre", 
+            json={"eski_sifre": ADMIN_PASSWORD, "yeni_sifre": new_password},
+            headers={"Authorization": f"Bearer {token}"}
+        )
+        assert response.status_code == 200
+        data = response.json()
+        assert data["message"] == "Şifre başarıyla değiştirildi"
+        
+        # Verify new password works
+        new_login_response = requests.post(f"{BASE_URL}/api/auth/giris", json={
+            "kullanici_adi": ADMIN_USERNAME,
+            "sifre": new_password
+        })
+        assert new_login_response.status_code == 200
+        assert "access_token" in new_login_response.json()
+        
+        # Change password back to original
+        new_token = new_login_response.json()["access_token"]
+        restore_response = requests.put(f"{BASE_URL}/api/users/sifre", 
+            json={"eski_sifre": new_password, "yeni_sifre": ADMIN_PASSWORD},
+            headers={"Authorization": f"Bearer {new_token}"}
+        )
+        assert restore_response.status_code == 200
+        print("PASS: Password changed and restored successfully")
+    
+    def test_get_user_profile_public(self):
+        """GET /api/users/{kullanici_adi} returns public profile"""
+        response = requests.get(f"{BASE_URL}/api/users/{ADMIN_USERNAME}")
+        assert response.status_code == 200
+        data = response.json()
+        assert data["kullanici_adi"] == ADMIN_USERNAME
+        assert "biyografi" in data
+        assert "ada_seviyesi" in data
+        assert "dinar" in data
+        # Should not include password hash
+        assert "sifre_hash" not in data
+        print(f"PASS: Public profile fetched with bio: {data.get('biyografi')}")
+
+
 if __name__ == "__main__":
     pytest.main([__file__, "-v", "--tb=short"])
