@@ -227,6 +227,9 @@ async def get_user_profile(kullanici_adi: str):
     user.setdefault("acik_temalar", [])
     user.setdefault("aktif_tema_id", None)
     user.setdefault("aktif_tema_gorsel", None)
+    user.setdefault("biyografi", None)
+    user.setdefault("ada_seviyesi", 0)
+    user.setdefault("dinar", 0)
     return user
 
 @api_router.put("/users/profil")
