@@ -88,6 +88,7 @@ function App() {
             <Route path="/profil/:kullanici_adi" element={<ProfilPage />} />
             <Route path="/cuzdan" element={user ? <CuzdanPage /> : <Navigate to="/giris" />} />
             <Route path="/siralama" element={<SiralamaPage />} />
+            <Route path="/hakkimizda" element={<HakkimizdaPage />} />
             <Route path="/admin" element={user?.rol === 'admin' ? <AdminPage /> : <Navigate to="/" />} />
           </Routes>
           <Footer />
