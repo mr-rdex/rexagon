@@ -121,6 +121,12 @@ async def get_admin_user(current_user: dict = Depends(get_current_user)):
         raise HTTPException(status_code=403, detail="Yönetici yetkisi gerekli")
     return current_user
 
+# ============ BASIC ROUTES ============
+
+@api_router.get("/")
+async def root():
+    return {"message": "Rexagon API", "status": "online"}
+
 # ============ AUTH ROUTES ============
 
 @api_router.post("/auth/kayit", response_model=dict)
