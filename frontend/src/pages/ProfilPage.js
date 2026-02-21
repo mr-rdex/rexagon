@@ -1,17 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../App';
-import { User as UserIcon, Calendar, Coins, Mail, Shield, Lock, Check, Palette } from 'lucide-react';
+import { Calendar, Coins, Shield, Lock, Check, Palette, User as UserIcon } from 'lucide-react';
 
 const ProfilPage = () => {
   const { kullanici_adi } = useParams();
   const { API, user: currentUser } = useAuth();
-  const navigate = useNavigate();
   const [profileUser, setProfileUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [themes, setThemes] = useState([]);
-  const [showThemes, setShowThemes] = useState(false);
   const [purchasing, setPurchasing] = useState(null);
 
   const isOwnProfile = !kullanici_adi || (currentUser && currentUser.kullanici_adi === kullanici_adi);
@@ -87,11 +85,7 @@ const ProfilPage = () => {
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString('tr-TR', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    });
+    return date.toLocaleDateString('tr-TR', { year: 'numeric', month: 'long', day: 'numeric' });
   };
 
   if (loading) {
@@ -117,188 +111,167 @@ const ProfilPage = () => {
   const userThemes = profileUser.acik_temalar || [];
 
   return (
-    <div className="min-h-screen pt-24 pb-16 px-4" data-testid="profile-page">
-      <div className="container mx-auto max-w-4xl">
-        {/* Profile Header with Background */}
-        <div
-          className="relative rounded-lg overflow-hidden mb-8"
-          style={{
-            backgroundImage: profileUser.aktif_tema_gorsel
-              ? `url(${profileUser.aktif_tema_gorsel})`
-              : 'linear-gradient(135deg, #222222 0%, #1E1E1E 100%)',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            minHeight: '200px'
-          }}
-        >
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#222222]"></div>
-          <div className="relative p-8">
-            {isOwnProfile && (
-              <button
-                onClick={() => setShowThemes(!showThemes)}
-                className="absolute top-4 right-4 bg-[#1E1E1E]/80 text-zinc-400 px-4 py-2 rounded-md text-sm hover:text-[#FDD500] transition-colors flex items-center space-x-2"
-                data-testid="toggle-themes-button"
-              >
-                <Palette size={16} />
-                <span>Temalar</span>
-              </button>
-            )}
+    <div className="min-h-screen pt-20" data-testid="profile-page">
+      {/* Full-width Hero Banner */}
+      <div
+        className="relative w-full"
+        style={{
+          backgroundImage: profileUser.aktif_tema_gorsel
+            ? `url(${profileUser.aktif_tema_gorsel})`
+            : 'url(/images/hero-bg.jpg)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          minHeight: '180px'
+        }}
+      >
+        <div className="absolute inset-0 bg-gradient-to-b from-black/40 to-[#222222]"></div>
+        <div className="relative container mx-auto max-w-7xl px-4 flex items-end pb-6" style={{ minHeight: '180px' }}>
+          <div className="flex items-center space-x-5">
+            <img
+              src={profileUser.yetki_gorseli || `http://cravatar.eu/helmavatar/${profileUser.kullanici_adi}/80`}
+              alt={profileUser.kullanici_adi}
+              className="w-20 h-20 rounded-lg border-2 border-[#FDD500] shadow-lg"
+              data-testid="profile-avatar"
+            />
+            <div>
+              <h1 className="text-3xl font-black uppercase text-white leading-tight" data-testid="profile-username">
+                {profileUser.kullanici_adi}
+              </h1>
+              <span className="inline-block mt-1 bg-[#FDD500] text-black text-xs font-bold uppercase px-3 py-1 rounded" data-testid="profile-rank">
+                {profileUser.yetki || 'Oyuncu'}
+              </span>
+            </div>
           </div>
         </div>
+      </div>
 
-        {/* Themes Section */}
-        {showThemes && isOwnProfile && (
-          <div className="bg-[#1E1E1E] border border-zinc-800 rounded-lg p-6 mb-8" data-testid="themes-section">
-            <h3 className="text-xl font-bold text-white mb-4 flex items-center space-x-2">
-              <Palette size={20} className="text-[#FDD500]" />
-              <span>Profil Temaları</span>
-            </h3>
-            {profileUser.aktif_tema_id && (
-              <button
-                onClick={handleRemoveTheme}
-                className="mb-4 text-sm text-zinc-400 hover:text-red-400 transition-colors underline"
-                data-testid="remove-theme-button"
-              >
-                Mevcut temayı kaldır
-              </button>
-            )}
-            {themes.length === 0 ? (
-              <p className="text-zinc-500 text-sm">Henüz tema eklenmemiş.</p>
-            ) : (
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                {themes.map((theme) => {
-                  const isUnlocked = userThemes.includes(theme.id);
-                  const isActive = profileUser.aktif_tema_id === theme.id;
-                  return (
-                    <div
-                      key={theme.id}
-                      className={`relative rounded-lg overflow-hidden border-2 transition-all ${
-                        isActive ? 'border-[#FDD500] shadow-[0_0_20px_rgba(253,213,0,0.3)]' : 'border-zinc-700 hover:border-zinc-500'
-                      }`}
-                      data-testid={`theme-card-${theme.id}`}
-                    >
-                      <div
-                        className="aspect-video bg-cover bg-center"
-                        style={{ backgroundImage: `url(${theme.gorsel_url})` }}
-                      />
-                      <div className="p-3 bg-[#2A2A2A]">
-                        <p className="text-white font-medium text-sm mb-1">{theme.isim}</p>
-                        {isActive ? (
-                          <span className="inline-flex items-center space-x-1 text-xs text-[#FDD500] font-bold">
-                            <Check size={12} />
-                            <span>Aktif</span>
-                          </span>
-                        ) : isUnlocked ? (
-                          <button
-                            onClick={() => handleSetActiveTheme(theme.id)}
-                            className="text-xs bg-[#FDD500] text-black font-bold px-3 py-1 rounded hover:bg-[#E6C200] transition-colors"
-                            data-testid={`activate-theme-${theme.id}`}
-                          >
-                            Kullan
-                          </button>
-                        ) : (
-                          <button
-                            onClick={() => handlePurchaseTheme(theme.id)}
-                            disabled={purchasing === theme.id}
-                            className="text-xs bg-zinc-700 text-white font-bold px-3 py-1 rounded hover:bg-zinc-600 transition-colors flex items-center space-x-1 disabled:opacity-50"
-                            data-testid={`buy-theme-${theme.id}`}
-                          >
-                            <Lock size={10} />
-                            <span>{theme.fiyat > 0 ? `${theme.fiyat} Kredi` : 'Ücretsiz'}</span>
-                          </button>
-                        )}
-                      </div>
-                    </div>
-                  );
-                })}
+      {/* Content: Two Column Layout */}
+      <div className="container mx-auto max-w-7xl px-4 py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Left Column */}
+          <div className="lg:col-span-2 space-y-6">
+            {/* Biyografi */}
+            <div className="bg-[#1E1E1E] border border-zinc-800 rounded-lg p-6" data-testid="bio-section">
+              <h3 className="text-zinc-500 text-sm uppercase tracking-wider mb-3">Biyografi</h3>
+              <p className="text-zinc-300 text-sm">
+                {profileUser.biyografi || 'Henüz bir biyografi eklenmemiş.'}
+              </p>
+            </div>
+
+            {/* Stats */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div className="bg-[#1E1E1E] border border-zinc-800 rounded-lg p-5" data-testid="stat-credit">
+                <div className="flex items-center space-x-3 mb-2">
+                  <Coins className="text-[#FDD500]" size={20} />
+                  <span className="text-zinc-500 text-sm uppercase tracking-wider">Kredi</span>
+                </div>
+                <p className="text-2xl font-black text-white">{(profileUser.kredi || 0).toFixed(0)}</p>
               </div>
-            )}
-          </div>
-        )}
-
-        {/* Profile Info */}
-        <div className="bg-[#1E1E1E] border border-zinc-800 rounded-xl p-8" data-testid="profile-info">
-          <div className="flex flex-col md:flex-row items-center md:items-start space-y-6 md:space-y-0 md:space-x-8 mb-8">
-            {/* Avatar with Rank Badge */}
-            <div className="relative">
-              {profileUser.yetki_gorseli ? (
-                <img
-                  src={profileUser.yetki_gorseli}
-                  alt={profileUser.yetki}
-                  className="w-32 h-32 rounded-lg shadow-lg object-cover"
-                />
-              ) : (
-                <img
-                  src={`http://cravatar.eu/helmavatar/${profileUser.kullanici_adi}/128`}
-                  alt={profileUser.kullanici_adi}
-                  className="w-32 h-32 rounded-lg shadow-lg"
-                />
-              )}
-              <div className="absolute -bottom-3 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-[#FDD500] to-[#E6C200] px-4 py-1 rounded-full shadow-lg">
-                <span className="text-black font-bold text-xs uppercase">{profileUser.yetki || 'Oyuncu'}</span>
+              <div className="bg-[#1E1E1E] border border-zinc-800 rounded-lg p-5" data-testid="stat-role">
+                <div className="flex items-center space-x-3 mb-2">
+                  <Shield className="text-[#FDD500]" size={20} />
+                  <span className="text-zinc-500 text-sm uppercase tracking-wider">Rol</span>
+                </div>
+                <p className="text-2xl font-black text-white uppercase">{profileUser.rol}</p>
+              </div>
+              <div className="bg-[#1E1E1E] border border-zinc-800 rounded-lg p-5" data-testid="stat-days">
+                <div className="flex items-center space-x-3 mb-2">
+                  <Calendar className="text-[#FDD500]" size={20} />
+                  <span className="text-zinc-500 text-sm uppercase tracking-wider">Gün</span>
+                </div>
+                <p className="text-2xl font-black text-white">
+                  {Math.floor((Date.now() - new Date(profileUser.kayit_tarihi)) / (1000 * 60 * 60 * 24))}
+                </p>
               </div>
             </div>
-            
-            <div className="flex-1 text-center md:text-left">
-              <div className="flex flex-col md:flex-row items-center md:items-center justify-center md:justify-start space-y-2 md:space-y-0 md:space-x-3 mb-2">
-                <h1 className="text-4xl font-black uppercase text-white">
-                  {profileUser.kullanici_adi}
-                </h1>
-                {profileUser.rol === 'admin' && (
-                  <span className="inline-flex items-center space-x-1 bg-[#FDD500]/10 border border-[#FDD500]/30 px-3 py-1 rounded-full text-xs font-bold text-[#FDD500] uppercase">
-                    <Shield size={14} />
-                    <span>Admin</span>
-                  </span>
-                )}
-              </div>
-              <div className="flex flex-col md:flex-row items-center md:items-center space-y-2 md:space-y-0 md:space-x-6 text-sm text-zinc-400">
-                <span className="flex items-center space-x-2">
-                  <Calendar size={16} />
-                  <span>Kayıt: {formatDate(profileUser.kayit_tarihi)}</span>
-                </span>
-                <span className="flex items-center space-x-2">
-                  <Mail size={16} />
-                  <span>{profileUser.email}</span>
-                </span>
-              </div>
-              {/* Admin Panel Button */}
-              {isOwnProfile && currentUser?.rol === 'admin' && (
+
+            {/* Hesap Oluşturma Tarihi */}
+            <div className="bg-[#1E1E1E] border border-zinc-800 rounded-lg p-6" data-testid="account-date-section">
+              <h3 className="text-zinc-500 text-sm uppercase tracking-wider mb-3">Hesap Oluşturma Tarihi</h3>
+              <p className="text-zinc-300 text-sm">{formatDate(profileUser.kayit_tarihi)}</p>
+            </div>
+          </div>
+
+          {/* Right Column - Themes */}
+          <div className="lg:col-span-1">
+            <div className="bg-[#1E1E1E] border border-zinc-800 rounded-lg p-6" data-testid="themes-section">
+              <h3 className="text-white font-bold uppercase tracking-wider text-center mb-6">Temalar</h3>
+              {profileUser.aktif_tema_id && isOwnProfile && (
                 <button
-                  onClick={() => navigate('/admin')}
-                  className="mt-4 bg-[#FDD500] text-black font-bold uppercase tracking-wide px-6 py-2 rounded-lg hover:bg-[#E6C200] transition-all btn-3d flex items-center space-x-2 mx-auto md:mx-0"
-                  data-testid="admin-panel-button"
+                  onClick={handleRemoveTheme}
+                  className="w-full mb-4 text-sm text-zinc-400 hover:text-red-400 transition-colors text-center underline"
+                  data-testid="remove-theme-button"
                 >
-                  <Shield size={16} />
-                  <span>Yönetim Paneli</span>
+                  Mevcut temayı kaldır
                 </button>
               )}
-            </div>
-          </div>
-
-          {/* Stats */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="bg-[#2A2A2A] rounded-lg p-6 text-center">
-              <div className="flex items-center justify-center mb-3">
-                <Coins className="text-[#FDD500]" size={32} />
-              </div>
-              <p className="text-3xl font-black text-white mb-1">{(profileUser.kredi || 0).toFixed(0)}</p>
-              <p className="text-sm text-zinc-400 uppercase tracking-wider">Kredi</p>
-            </div>
-            <div className="bg-[#2A2A2A] rounded-lg p-6 text-center">
-              <div className="flex items-center justify-center mb-3">
-                <UserIcon className="text-[#FDD500]" size={32} />
-              </div>
-              <p className="text-3xl font-black text-white mb-1 uppercase">{profileUser.yetki || 'Oyuncu'}</p>
-              <p className="text-sm text-zinc-400 uppercase tracking-wider">Yetki</p>
-            </div>
-            <div className="bg-[#2A2A2A] rounded-lg p-6 text-center">
-              <div className="flex items-center justify-center mb-3">
-                <Calendar className="text-[#FDD500]" size={32} />
-              </div>
-              <p className="text-lg font-bold text-white mb-1">
-                {Math.floor((Date.now() - new Date(profileUser.kayit_tarihi)) / (1000 * 60 * 60 * 24))}
-              </p>
-              <p className="text-sm text-zinc-400 uppercase tracking-wider">Gün</p>
+              {themes.length === 0 ? (
+                <p className="text-zinc-500 text-sm text-center">Henüz tema eklenmemiş.</p>
+              ) : (
+                <div className="space-y-4">
+                  {themes.map((theme) => {
+                    const isUnlocked = userThemes.includes(theme.id);
+                    const isActive = profileUser.aktif_tema_id === theme.id;
+                    return (
+                      <div
+                        key={theme.id}
+                        className={`relative rounded-lg overflow-hidden border-2 transition-all ${
+                          isActive ? 'border-[#FDD500]' : 'border-zinc-700'
+                        }`}
+                        data-testid={`theme-card-${theme.id}`}
+                      >
+                        <div
+                          className="aspect-video bg-cover bg-center bg-[#2A2A2A]"
+                          style={{ backgroundImage: `url(${theme.gorsel_url})` }}
+                        />
+                        {/* Status icon */}
+                        <div className="absolute top-2 right-2">
+                          {isActive ? (
+                            <div className="w-7 h-7 bg-[#FDD500] rounded-full flex items-center justify-center">
+                              <Check size={14} className="text-black" />
+                            </div>
+                          ) : isUnlocked ? (
+                            <div className="w-7 h-7 bg-[#FDD500]/20 border border-[#FDD500] rounded-full flex items-center justify-center">
+                              <Check size={14} className="text-[#FDD500]" />
+                            </div>
+                          ) : (
+                            <div className="w-7 h-7 bg-zinc-800/80 border border-zinc-600 rounded-full flex items-center justify-center">
+                              <Lock size={12} className="text-zinc-400" />
+                            </div>
+                          )}
+                        </div>
+                        <div className="p-3 bg-[#2A2A2A]">
+                          <p className="text-white font-medium text-sm">{theme.isim}</p>
+                          {isOwnProfile && (
+                            <div className="mt-2">
+                              {isActive ? (
+                                <span className="text-xs text-[#FDD500] font-bold">Aktif</span>
+                              ) : isUnlocked ? (
+                                <button
+                                  onClick={() => handleSetActiveTheme(theme.id)}
+                                  className="text-xs bg-[#FDD500] text-black font-bold px-3 py-1 rounded hover:bg-[#E6C200] transition-colors"
+                                  data-testid={`activate-theme-${theme.id}`}
+                                >
+                                  Kullan
+                                </button>
+                              ) : (
+                                <button
+                                  onClick={() => handlePurchaseTheme(theme.id)}
+                                  disabled={purchasing === theme.id}
+                                  className="text-xs bg-zinc-700 text-white font-bold px-3 py-1 rounded hover:bg-zinc-600 transition-colors disabled:opacity-50"
+                                  data-testid={`buy-theme-${theme.id}`}
+                                >
+                                  {theme.fiyat > 0 ? `${theme.fiyat} Kredi` : 'Ücretsiz Aç'}
+                                </button>
+                              )}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
             </div>
           </div>
         </div>
