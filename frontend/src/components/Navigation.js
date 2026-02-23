@@ -41,12 +41,6 @@ const Navigation = () => {
     setShowProfileMenu(false);
   };
 
-  const handleCopyIP = () => {
-    navigator.clipboard.writeText('play.rexagon.com.tr');
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
-
   const navLinks = [
     { to: '/', label: 'Ana Sayfa' },
     { to: '/market', label: 'Market' },
@@ -57,8 +51,7 @@ const Navigation = () => {
 
   return (
     <>
-<<<<<<< HEAD
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-[#222222]/95 backdrop-blur-md border-b border-white/5">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-[#222222]/95 backdrop-blur-md border-b border-white/5 shadow-lg transition-all duration-300">
       <div className="container mx-auto px-4 md:px-6 max-w-7xl">
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
@@ -66,37 +59,30 @@ const Navigation = () => {
             <img 
               src="/images/logo.png" 
               alt="Rexagon" 
-              className="h-12 md:h-14 w-auto object-contain"
-=======
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-[#222222]/70 border-b border-white/5">
-      <div className="container mx-auto md:px-6 max-w-8xl">
-        <div className="flex items-center justify-between h-20">
-          {/* Logo */}
-          <Link to="/" className="flex pl-4 items-center" data-testid="logo-link">
-            <img 
-              src="/images/logo.png" 
-              alt="Rexagon" 
-              className="h-20 md:h-40 w-auto object-contain"
->>>>>>> 6612e1a (Veritabanı ve API ayarları düzeltildi)
+              className="h-12 md:h-14 w-auto object-contain hover:scale-105 transition-transform duration-300"
             />
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center space-x-14">
+          <div className="hidden lg:flex items-center space-x-8">
             {navLinks.map(link => (
               <Link
                 key={link.to}
                 to={link.to}
-<<<<<<< HEAD
-                className="text-zinc-400 hover:text-[#FDD500] font-medium transition-colors uppercase tracking-wider text-sm whitespace-nowrap"
-=======
-                className="text-zinc-400 hover:text-[#FDD500] font-medium transition-colors uppercase px-3 tracking-wider text-sm whitespace-nowrap"
->>>>>>> 6612e1a (Veritabanı ve API ayarları düzeltildi)
+                className="text-zinc-400 hover:text-[#FDD500] font-medium transition-all duration-300 ease-in-out uppercase tracking-wider text-sm whitespace-nowrap hover:shadow-sm"
                 data-testid={`nav-${link.label.toLowerCase().replace(' ', '-')}`}
               >
                 {link.label}
               </Link>
             ))}
+            {/* New Kredi Yükle Button */}
+            <Link
+              to="/cuzdan"
+              className="bg-[#FDD500] text-black font-bold uppercase tracking-wide px-6 py-2 rounded-lg hover:bg-[#E6C200] transition-all duration-300 ease-in-out btn-3d shadow-lg hover:shadow-[0_0_20px_rgba(253,213,0,0.4)] transform hover:-translate-y-1"
+              data-testid="credit-load-button"
+            >
+              Kredi Yükle
+            </Link>
           </div>
 
           {/* User Actions */}
@@ -105,15 +91,11 @@ const Navigation = () => {
               <div className="relative" ref={profileMenuRef}>
                 <button
                   onClick={() => setShowProfileMenu(!showProfileMenu)}
-                  className="flex items-center space-x-3 px-4 py-2 bg-[#1E1E1E] border border-zinc-800 rounded-xl hover:border-[#FDD500]/50 transition-all"
+                  className="flex items-center space-x-3 px-4 py-2 bg-[#1E1E1E] border border-zinc-800 rounded-xl hover:border-[#FDD500]/50 transition-all duration-300 shadow-md hover:shadow-lg"
                   data-testid="profile-menu-button"
                 >
                   <img
-<<<<<<< HEAD
-                    src={`https://cravatar.eu/helmavatar/${user.kullanici_adi}/32`}
-=======
                     src={`https://mc-heads.net/avatar/${user.kullanici_adi}/32`}
->>>>>>> 6612e1a (Veritabanı ve API ayarları düzeltildi)
                     alt={user.kullanici_adi}
                     className="w-8 h-8 rounded"
                   />
@@ -125,19 +107,19 @@ const Navigation = () => {
 
                 {showProfileMenu && (
                   <div
-                    className="absolute right-0 top-full mt-2 w-56 bg-[#1E1E1E] border border-zinc-800 rounded-xl shadow-lg overflow-hidden transition-all duration-200"
+                    className="absolute right-0 top-full mt-2 w-56 bg-[#1E1E1E] border border-zinc-800 rounded-xl shadow-xl overflow-hidden animate-slide-down origin-top"
                     data-testid="profile-dropdown"
                   >
                     <Link
                       to="/profil"
-                      className="flex items-center space-x-3 px-4 py-3 hover:bg-[#2A2A2A] transition-colors text-white"
+                      className="flex items-center space-x-3 px-4 py-3 hover:bg-[#2A2A2A] transition-colors duration-200 text-white"
                       onClick={() => setShowProfileMenu(false)}
                     >
                       <User size={18} />
                       <span>Profil</span>
                     </Link>
                     <button
-                      className="w-full flex items-center space-x-3 px-4 py-3 hover:bg-[#2A2A2A] transition-colors text-white"
+                      className="w-full flex items-center space-x-3 px-4 py-3 hover:bg-[#2A2A2A] transition-colors duration-200 text-white"
                       onClick={() => { setShowProfileMenu(false); setBio(user?.biyografi || ''); setShowSettings(true); setSettingsTab('bio'); }}
                       data-testid="profile-settings-button"
                     >
@@ -146,7 +128,7 @@ const Navigation = () => {
                     </button>
                     <Link
                       to="/cuzdan"
-                      className="flex items-center space-x-3 px-4 py-3 hover:bg-[#2A2A2A] transition-colors text-white"
+                      className="flex items-center space-x-3 px-4 py-3 hover:bg-[#2A2A2A] transition-colors duration-200 text-white"
                       onClick={() => setShowProfileMenu(false)}
                       data-testid="wallet-link"
                     >
@@ -161,7 +143,7 @@ const Navigation = () => {
                         <div className="border-t border-zinc-800"></div>
                         <Link
                           to="/admin"
-                          className="flex items-center space-x-3 px-4 py-3 hover:bg-[#2A2A2A] transition-colors text-[#FDD500]"
+                          className="flex items-center space-x-3 px-4 py-3 hover:bg-[#2A2A2A] transition-colors duration-200 text-[#FDD500]"
                           onClick={() => setShowProfileMenu(false)}
                           data-testid="admin-link"
                         >
@@ -173,7 +155,7 @@ const Navigation = () => {
                     <div className="border-t border-zinc-800"></div>
                     <button
                       onClick={handleLogout}
-                      className="w-full flex items-center space-x-3 px-4 py-3 hover:bg-[#2A2A2A] transition-colors text-red-400"
+                      className="w-full flex items-center space-x-3 px-4 py-3 hover:bg-[#2A2A2A] transition-colors duration-200 text-red-400"
                       data-testid="logout-button"
                     >
                       <LogOut size={18} />
@@ -186,18 +168,14 @@ const Navigation = () => {
               <>
                 <Link
                   to="/giris"
-<<<<<<< HEAD
-                  className="text-zinc-400 hover:text-white font-medium transition-colors uppercase tracking-wider text-sm"
-=======
-                  className="text-zinc-400 hover:text-white font-medium transition-colors px-6 uppercase tracking-wider text-sm"
->>>>>>> 6612e1a (Veritabanı ve API ayarları düzeltildi)
+                  className="text-zinc-400 hover:text-white font-medium transition-colors duration-300 uppercase tracking-wider text-sm hover:shadow-sm"
                   data-testid="login-link"
                 >
                   Giriş Yap
                 </Link>
                 <Link
                   to="/kayit"
-                  className="bg-[#FDD500] text-black font-bold uppercase tracking-wide px-6 py-2 rounded-lg hover:bg-[#E6C200] transition-all btn-3d"
+                  className="bg-[#FDD500] text-black font-bold uppercase tracking-wide px-6 py-2 rounded-lg hover:bg-[#E6C200] transition-all duration-300 btn-3d shadow-lg transform hover:-translate-y-1"
                   data-testid="register-link"
                 >
                   Kayıt Ol
@@ -208,11 +186,7 @@ const Navigation = () => {
 
           {/* Mobile Menu Button */}
           <button
-<<<<<<< HEAD
-            className="md:hidden p-2 text-white"
-=======
-            className="md:hidden pr-4 p-2 text-white"
->>>>>>> 6612e1a (Veritabanı ve API ayarları düzeltildi)
+            className="md:hidden p-2 text-white hover:text-[#FDD500] transition-colors duration-300"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             data-testid="mobile-menu-button"
           >
@@ -222,35 +196,34 @@ const Navigation = () => {
 
         {/* Mobile Menu */}
         {mobileMenuOpen && (
-<<<<<<< HEAD
-          <div className="md:hidden py-4 border-t border-white/5">
-=======
-          <div className="md:hidden py-4 px-4 border-t bg-[#222222]/80 border-white/5">
->>>>>>> 6612e1a (Veritabanı ve API ayarları düzeltildi)
+          <div className="md:hidden py-4 border-t border-white/5 animate-slide-down">
             {navLinks.map(link => (
               <Link
                 key={link.to}
                 to={link.to}
-                className="block py-3 text-zinc-400 hover:text-[#FDD500] font-medium transition-colors uppercase tracking-wider text-sm"
+                className="block py-3 text-zinc-400 hover:text-[#FDD500] font-medium transition-colors duration-200 uppercase tracking-wider text-sm"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 {link.label}
               </Link>
             ))}
+             {/* Mobile Kredi Yükle Button */}
+            <Link
+                to="/cuzdan"
+                className="block py-3 text-[#FDD500] font-bold uppercase tracking-wider text-sm hover:text-[#E6C200] transition-colors duration-200"
+                onClick={() => setMobileMenuOpen(false)}
+            >
+                Kredi Yükle
+            </Link>
+
             <div className="border-t border-white/5 mt-4 pt-4">
               {user ? (
                 <>
                   <div className="flex items-center space-x-3 mb-4">
                     <img
-<<<<<<< HEAD
-                      src={`https://cravatar.eu/helmavatar/${user.kullanici_adi}/32`}
+                      src={`https://mc-heads.net/avatar/${user.kullanici_adi}/32`}
                       alt={user.kullanici_adi}
                       className="w-8 h-8 rounded"
-=======
-                      src={`https://mc-heads.net/avatar/${user.kullanici_adi}`}
-                      alt={user.kullanici_adi}
-                      className="w-12 h-12 rounded"
->>>>>>> 6612e1a (Veritabanı ve API ayarları düzeltildi)
                     />
                     <div className="flex flex-col">
                       <span className="text-sm font-medium text-white">{user.kullanici_adi}</span>
@@ -314,7 +287,7 @@ const Navigation = () => {
     {/* Profile Settings Modal */}
     {showSettings && (
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4" data-testid="settings-modal">
-        <div className="bg-[#1E1E1E] border border-zinc-800 rounded-xl p-8 max-w-lg w-full">
+        <div className="bg-[#1E1E1E] border border-zinc-800 rounded-xl p-8 max-w-lg w-full animate-slide-down">
           <div className="flex items-center justify-between mb-6">
             <h3 className="text-2xl font-bold text-white">Profil Ayarları</h3>
             <button onClick={() => setShowSettings(false)} className="text-zinc-400 hover:text-white" data-testid="close-settings-modal"><XIcon size={24} /></button>
